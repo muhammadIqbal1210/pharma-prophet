@@ -1,4 +1,6 @@
 # app/schemas/user.py
+import re
+
 from pydantic import BaseModel, EmailStr, field_validator
 
 class UserCreate(BaseModel):
