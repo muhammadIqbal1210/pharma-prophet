@@ -1,9 +1,10 @@
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
+from app.config import settings
 
 # URL Koneksi ke MySQL
-SQLALCHEMY_DATABASE_URL = "mysql+mysqlconnector://root:@localhost/db_pharmacast"
+SQLALCHEMY_DATABASE_URL = settings.DATABASE_URL
 
 # Engine: Jembatan ke database
 engine = create_engine(SQLALCHEMY_DATABASE_URL)

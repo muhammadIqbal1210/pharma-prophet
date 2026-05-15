@@ -4,9 +4,10 @@ from app.schemas.user import UserCreate
 from app.models.user import User
 from app.services.auth_service import get_password_hash
 from app.database.session import get_db
-from app.schemas.user import UserResponse
+from app.schemas.user import UserResponse, UserLogin, UserCreate
 from sqlalchemy.orm import Session
 from app.models.user import User
+from app.services.auth_service import verify_password, create_access_token
 
 router = APIRouter()
 
@@ -35,6 +36,42 @@ async def register(user: UserCreate, db = Depends(get_db)):
     db.refresh(new_user)
     
     return {"message": "User berhasil dibuat "}
+
+@router.post("/login")
+def login(user_data: UserLogin, db: Session = Depends(get_db)):
+    # 1. Cari user berdasarkan email
+    user = db.query(User).filter(User.email == user_data.email).first()
+    
+    # 2. Cek apakah user ditemukan
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED, 
+            detail="Email atau password salah"
+        )
+    
+    # 3. Verifikasi password yang diinput dengan hash di database
+    if not verify_password(user_data.password, user.password):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED, 
+            detail="Email atau password salah"
+        )
+    
+    # 4. Jika cocok, buatkan Token JWT
+    access_token = create_access_token(
+        data={"sub": user.email, "role": user.role}
+    )
+    
+    # 5. Kirim token ke Frontend
+    return {
+        "access_token": access_token,
+        "token_type": "bearer",
+        "user": {
+            "id": user.id,
+            "username": user.username,
+            "email": user.email,
+            "role": user.role
+        }
+    }
 
 # Mendapatkan semua user
 @router.get("/users", response_model=list[UserResponse])
