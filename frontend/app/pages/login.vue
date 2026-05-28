@@ -1,30 +1,77 @@
 <template>
-  <div class="auth-wrapper">
-    <div class="auth-card">
-      <h2>Login PharmaCast</h2>
-      <p class="subtitle">Silakan masuk ke akun kasir/admin Anda</p>
+  <div class="flex items-center justify-center min-h-screen p-4">
+    <div class="bg-white rounded-3xl shadow-xl p-10 w-full max-w-md animate-fade-in">
       
-      <form @submit.prevent="handleLogin">
-        <div class="form-group">
-          <label>Email</label>
-          <input v-model="form.email" type="email" placeholder="contoh@email.com" required />
+      <div class="flex flex-col items-center mb-8 border-b border-slate-100 pb-6">
+        <div class="flex items-center gap-4 mb-4">
+          <div class="w-16 h-16 bg-slate-100 rounded-2xl flex items-center justify-center border border-slate-200 shadow-inner">
+            <span class="text-3xl font-extrabold text-slate-300">Rx</span>
+          </div>
+          <div>
+            <h1 class="text-2xl font-bold text-slate-950 tracking-tight">Pharma Prophet</h1>
+            <p class="text-xs font-medium text-slate-500 tracking-wider">Sistem Prediksi Stok Apotek</p>
+          </div>
         </div>
+        <p class="text-sm font-medium text-slate-500">Masuk untuk mengakses Dashboard</p>
+      </div>
 
-        <div class="form-group">
-          <label>Password</label>
-          <input v-model="form.password" type="password" placeholder="••••••••" required />
+      <div class="flex gap-2 bg-slate-50 p-1.5 rounded-2xl border border-slate-100 mb-8 shadow-inner">
+        <div class="flex-1 text-center py-3 bg-gradient-to-r from-emerald-600 to-green-600 text-white font-bold rounded-xl shadow-sm border border-slate-100 cursor-pointer">
+          Masuk
         </div>
+        <NuxtLink to="/register" class="flex-1 text-center py-3 text-slate-600 hover:text-slate-900 font-semibold rounded-xl hover:bg-white/50 transition cursor-pointer">
+          Daftar
+        </NuxtLink>
+      </div>
 
-        <button type="submit" :disabled="loading">
-          {{ loading ? 'Memverifikasi...' : 'Masuk' }}
-        </button>
-      </form>
+      <form @submit.prevent="handleLogin" class="space-y-6">
+      <div class="relative border-b-2 border-slate-200 focus-within:border-emerald-500 transition-all duration-300 py-1">
+        <input 
+          v-model="form.email" 
+          type="email" 
+          id="email"
+          placeholder=" " 
+          required 
+          class="peer w-full px-1 py-2 bg-transparent outline-none pt-5 placeholder-transparent text-slate-900 font-medium text-base"
+        />
+        <label 
+          for="email" 
+          class="absolute left-1 top-4 text-slate-400 font-medium text-sm tracking-wider transition-all duration-300 pointer-events-none
+                peer-placeholder-shown:text-base peer-placeholder-shown:top-4 peer-placeholder-shown:font-medium
+                peer-focus:top-0 peer-focus:text-xs peer-focus:text-emerald-600 peer-focus:font-bold
+                [:not(:placeholder-shown)]:top-0 [:not(:placeholder-shown)]:text-xs [:not(:placeholder-shown)]:text-emerald-600 [:not(:placeholder-shown)]:font-bold"
+        >
+          Email Kasir/Admin
+        </label>
+      </div>
 
-      <p v-if="errorMsg" class="error-text">{{ errorMsg }}</p>
-      
-      <p class="auth-footer">
-        Belum punya akun? <NuxtLink to="/register">Daftar di sini</NuxtLink>
-      </p>
+      <div class="relative border border-slate-200 rounded-xl focus-within:border-emerald-500 transition-all duration-300 py-1">
+        <input 
+          v-model="form.password" 
+          type="password" 
+          id="password"
+          placeholder=" " 
+          required 
+          class="peer w-full px-1 py-2 bg-transparent outline-none pt-5 placeholder-transparent text-slate-900 font-medium text-base"
+        />
+        <label 
+          for="password" 
+          class="absolute left-1 top-4 text-slate-400 font-medium text-sm tracking-wider transition-all duration-300 pointer-events-none
+                peer-placeholder-shown:text-base peer-placeholder-shown:top-4 peer-placeholder-shown:font-medium
+                peer-focus:top-0 peer-focus:text-xs peer-focus:text-emerald-600 peer-focus:font-bold
+                [:not(:placeholder-shown)]:top-0 [:not(:placeholder-shown)]:text-xs [:not(:placeholder-shown)]:text-emerald-600 [:not(:placeholder-shown)]:font-bold"
+        >
+          Password
+        </label>
+      </div>
+
+      <button type="submit" :disabled="loading" 
+              class="w-full py-4 bg-gradient-to-r from-emerald-600 to-green-600 text-white font-bold rounded-2xl hover:shadow-lg hover:shadow-emerald-200 active:scale-[0.98] transition-all duration-150 disabled:opacity-60">
+        {{ loading ? 'Memverifikasi...' : 'Masuk ke Sistem' }}
+      </button>
+    </form>
+
+      <p v-if="errorMsg" class="mt-6 text-center text-sm font-semibold text-rose-600 bg-rose-50 p-4 rounded-xl border border-rose-100">{{ errorMsg }}</p>
     </div>
   </div>
 </template>
