@@ -11,10 +11,13 @@ export default defineNuxtConfig({
       ]
     }
   },
-  css: [
-    '~/assets/css/main.css'
+  modules: [
+    '@nuxtjs/tailwindcss'
   ],
-  
+  // css: [
+  //   '~/assets/css/main.css'
+  // ],
+
   runtimeConfig: {
     public: {
       // Ganti process.env menjadi import.meta.env
