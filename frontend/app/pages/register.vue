@@ -26,10 +26,24 @@
 
       <form @submit.prevent="handleRegister" class="space-y-5">
         <div class="grid grid-cols-2 gap-4">
-          <div class="space-y-1.5">
-            <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Username</label>
-            <input v-model="form.username" type="text" placeholder="iqbal_med" required 
-                   class="w-full px-5 py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-200 focus:border-emerald-400 transition placeholder:text-slate-400 text-sm font-medium"/>
+          <div class="relative min-h-[56px]">
+            <input 
+              v-model="form.username" 
+              type="text" 
+              id="username"
+              placeholder=" " 
+              required 
+              class="peer w-full px-4 py-3.5 bg-transparent border-2 border-slate-200 rounded-xl outline-none text-slate-900 font-medium text-base transition-colors duration-300 focus:border-emerald-500"
+            />
+            <label 
+              for="username" 
+              class="absolute left-3 bg-white text-slate-400 font-normal text-sm tracking-wider transition-all duration-300 pointer-events-none origin-[0_0]
+                    top-1/2 -translate-y-1/2 scale-100
+                    peer-focus:top-0 peer-focus:text-xs peer-focus:-translate-y-1/2 peer-focus:text-emerald-600 peer-focus:font-semibold
+                    [:not(:placeholder-shown)]:top-0 [:not(:placeholder-shown)]:scale-85 [:not(:placeholder-shown)]:-translate-y-1/2 [:not(:placeholder-shown)]:text-emerald-600 [:not(:placeholder-shown)]:font-bold"
+            >
+              Username
+            </label>
           </div>
           <div class="space-y-1.5">
             <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Email</label>
