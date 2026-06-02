@@ -25,49 +25,49 @@
       </div>
 
       <form @submit.prevent="handleLogin" class="space-y-6">
-      <div class="relative border-b-2 border-slate-200 focus-within:border-emerald-500 transition-all duration-300 py-1">
+      <div class="relative min-h-[56px]">
         <input 
           v-model="form.email" 
           type="email" 
           id="email"
           placeholder=" " 
           required 
-          class="peer w-full px-1 py-2 bg-transparent outline-none pt-5 placeholder-transparent text-slate-900 font-medium text-base"
+          class="peer w-full px-4 py-3.5 bg-transparent border-2 border-slate-200 rounded-xl outline-none text-slate-900 font-medium text-base transition-colors duration-300 focus:border-emerald-500"
         />
         <label 
           for="email" 
-          class="absolute left-1 top-4 text-slate-400 font-medium text-sm tracking-wider transition-all duration-300 pointer-events-none
-                peer-placeholder-shown:text-base peer-placeholder-shown:top-4 peer-placeholder-shown:font-medium
-                peer-focus:top-0 peer-focus:text-xs peer-focus:text-emerald-600 peer-focus:font-bold
-                [:not(:placeholder-shown)]:top-0 [:not(:placeholder-shown)]:text-xs [:not(:placeholder-shown)]:text-emerald-600 [:not(:placeholder-shown)]:font-bold"
+          class="absolute left-3 px-1 bg-white text-slate-400 font-normal text-sm tracking-wider transition-all duration-300 pointer-events-none origin-[0_0]
+                top-1/2 -translate-y-1/2 scale-100
+                peer-focus:top-0 peer-focus:text-xs peer-focus:-translate-y-1/2 peer-focus:text-emerald-600 peer-focus:font-semibold
+                [:not(:placeholder-shown)]:top-0 [:not(:placeholder-shown)]:scale-85 [:not(:placeholder-shown)]:-translate-y-1/2 [:not(:placeholder-shown)]:text-emerald-600 [:not(:placeholder-shown)]:font-bold"
         >
-          Email Kasir/Admin
+          Masukkan Email Anda
         </label>
       </div>
 
-      <div class="relative border border-slate-200 rounded-xl focus-within:border-emerald-500 transition-all duration-300 py-1">
+      <div class="relative min-h-[56px]">
         <input 
           v-model="form.password" 
           type="password" 
           id="password"
           placeholder=" " 
           required 
-          class="peer w-full px-1 py-2 bg-transparent outline-none pt-5 placeholder-transparent text-slate-900 font-medium text-base"
+          class="peer w-full px-4 py-3.5 bg-transparent border-2 border-slate-200 rounded-xl outline-none text-slate-900 font-medium text-base transition-colors duration-300 focus:border-emerald-500"
         />
         <label 
           for="password" 
-          class="absolute left-1 top-4 text-slate-400 font-medium text-sm tracking-wider transition-all duration-300 pointer-events-none
-                peer-placeholder-shown:text-base peer-placeholder-shown:top-4 peer-placeholder-shown:font-medium
-                peer-focus:top-0 peer-focus:text-xs peer-focus:text-emerald-600 peer-focus:font-bold
-                [:not(:placeholder-shown)]:top-0 [:not(:placeholder-shown)]:text-xs [:not(:placeholder-shown)]:text-emerald-600 [:not(:placeholder-shown)]:font-bold"
+          class="absolute left-3 px-1 bg-white text-slate-400 font-normal text-sm tracking-wider transition-all duration-300 pointer-events-none origin-[0_0]
+                top-1/2 -translate-y-1/2 scale-100
+                peer-focus:top-0 peer-focus:text-xs peer-focus:-translate-y-1/2 peer-focus:text-emerald-600 peer-focus:font-medium
+                [:not(:placeholder-shown)]:top-0 [:not(:placeholder-shown)]:scale-85 [:not(:placeholder-shown)]:-translate-y-1/2 [:not(:placeholder-shown)]:text-emerald-600 [:not(:placeholder-shown)]:font-bold"
         >
           Password
         </label>
       </div>
 
       <button type="submit" :disabled="loading" 
-              class="w-full py-4 bg-gradient-to-r from-emerald-600 to-green-600 text-white font-bold rounded-2xl hover:shadow-lg hover:shadow-emerald-200 active:scale-[0.98] transition-all duration-150 disabled:opacity-60">
-        {{ loading ? 'Memverifikasi...' : 'Masuk ke Sistem' }}
+              class="w-full py-4 bg-gradient-to-r from-emerald-600 to-green-600 text-white font-bold rounded-xl hover:shadow-lg hover:shadow-emerald-200 active:scale-[0.98] transition-all duration-150 disabled:opacity-60">
+        {{ loading ? 'Memverifikasi...' : 'Masuk' }}
       </button>
     </form>
 
