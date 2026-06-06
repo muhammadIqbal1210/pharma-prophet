@@ -34,7 +34,7 @@ export const useAuth = () => {
       tokenCookie.value = response.access_token
       
       // Arahkan langsung ke dashboard
-      navigateTo('/')
+      navigateTo('/dashboard')
       return { success: true }
     } catch (error: any) {
       throw error.data?.detail || 'Email atau password salah'
