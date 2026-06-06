@@ -32,14 +32,14 @@
           id="email"
           placeholder=" " 
           required 
-          class="peer w-full px-4 py-3.5 bg-transparent border-2 border-slate-200 rounded-xl outline-none text-slate-900 font-medium text-base transition-colors duration-300 focus:border-emerald-500"
+          class="peer w-full px-4 py-3.5 bg-transparent border-2 border-slate-200 rounded-xl outline-none text-slate-900 font-normal text-base transition-colors duration-300 focus:border-emerald-500"
         />
         <label 
           for="email" 
           class="absolute left-3 px-1 bg-white text-slate-400 font-normal text-sm tracking-wider transition-all duration-300 pointer-events-none origin-[0_0]
                 top-1/2 -translate-y-1/2 scale-100
-                peer-focus:top-0 peer-focus:text-xs peer-focus:-translate-y-1/2 peer-focus:text-emerald-600 peer-focus:font-semibold
-                [:not(:placeholder-shown)]:top-0 [:not(:placeholder-shown)]:scale-85 [:not(:placeholder-shown)]:-translate-y-1/2 [:not(:placeholder-shown)]:text-emerald-600 [:not(:placeholder-shown)]:font-bold"
+                peer-focus:top-0 peer-focus:text-xs peer-focus:-translate-y-1/2 peer-focus:text-emerald-600 peer-focus:font-medium
+                peer-[:not(:placeholder-shown)]:top-0 peer-[:not(:placeholder-shown)]:text-xs peer-[:not(:placeholder-shown)]:-translate-y-1/2 peer-[:not(:placeholder-shown)]:text-emerald-600 peer-[:not(:placeholder-shown)]:font-medium"
         >
           Masukkan Email Anda
         </label>
@@ -52,14 +52,14 @@
           id="password"
           placeholder=" " 
           required 
-          class="peer w-full px-4 py-3.5 bg-transparent border-2 border-slate-200 rounded-xl outline-none text-slate-900 font-medium text-base transition-colors duration-300 focus:border-emerald-500"
+          class="peer w-full px-4 py-3.5 bg-transparent border-2 border-slate-200 rounded-xl outline-none text-slate-900 font-normal text-base transition-colors duration-300 focus:border-emerald-500"
         />
         <label 
           for="password" 
           class="absolute left-3 px-1 bg-white text-slate-400 font-normal text-sm tracking-wider transition-all duration-300 pointer-events-none origin-[0_0]
                 top-1/2 -translate-y-1/2 scale-100
                 peer-focus:top-0 peer-focus:text-xs peer-focus:-translate-y-1/2 peer-focus:text-emerald-600 peer-focus:font-medium
-                [:not(:placeholder-shown)]:top-0 [:not(:placeholder-shown)]:scale-85 [:not(:placeholder-shown)]:-translate-y-1/2 [:not(:placeholder-shown)]:text-emerald-600 [:not(:placeholder-shown)]:font-bold"
+                peer-[:not(:placeholder-shown)]:top-0 peer-[:not(:placeholder-shown)]:text-xs peer-[:not(:placeholder-shown)]:-translate-y-1/2 peer-[:not(:placeholder-shown)]:text-emerald-600 peer-[:not(:placeholder-shown)]:font-medium"
         >
           Password
         </label>
