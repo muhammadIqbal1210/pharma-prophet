@@ -15,11 +15,11 @@
         <p class="text-sm font-semibold text-slate-500">Daftar Akun Baru untuk akses sistem</p>
       </div>
 
-      <div class="flex gap-2 bg-slate-50 p-1.5 rounded-2xl border border-slate-100 mb-8 shadow-inner">
-        <NuxtLink to="/login" class="flex-1 text-center py-3 text-slate-500 hover:text-slate-900 font-semibold rounded-xl hover:bg-white/50 transition cursor-pointer">
+      <div class="flex gap-2 rounded-xl border border-slate-400 mb-8">
+        <NuxtLink to="/login" class="flex-1 text-center py-3 text-slate-900 hover:text-slate-900 font-semibold rounded-xl hover:bg-white/50 transition cursor-pointer">
           Masuk
         </NuxtLink>
-        <div class="flex-1 text-center py-3 bg-gradient-to-r from-emerald-600 to-green-600 text-white font-bold rounded-xl shadow-sm border border-slate-100 cursor-pointer">
+        <div class="flex-1 text-center py-3 bg-gradient-to-r from-emerald-600 to-green-600 text-white font-semibold rounded-xl shadow-sm border border-slate-100 cursor-pointer">
           Daftar
         </div>
       </div>
