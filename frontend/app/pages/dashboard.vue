@@ -1,3 +1,9 @@
+<script setup>
+definePageMeta({
+  layout: 'sidebar', // Menggunakan layouts/user-panel.vue
+  composables: 'useAuth'    // Menggunakan middleware/auth.ts
+})
+</script>
 <template>
   <div class="p-8">
     <h1 class="text-xl font-bold">Dashboard Sementara</h1>
