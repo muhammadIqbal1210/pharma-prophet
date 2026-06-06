@@ -4,9 +4,7 @@
       
       <div class="flex flex-col items-center mb-8 border-b border-slate-100 pb-6">
         <div class="flex items-center gap-4 mb-4">
-          <div class="w-16 h-16 bg-slate-100 rounded-2xl flex items-center justify-center border border-slate-200 shadow-inner">
-            <span class="text-3xl font-extrabold text-slate-300">Rx</span>
-          </div>
+          <img src="/ikon.jpg" alt="Logo Pharma Prophet" class="w-16 h-16 object-contain">
           <div>
             <h1 class="text-2xl font-bold text-slate-950 tracking-tight">Pharma Prophet</h1>
             <p class="text-xs font-medium text-slate-500 tracking-wider">Sistem Prediksi Stok Apotek</p>
