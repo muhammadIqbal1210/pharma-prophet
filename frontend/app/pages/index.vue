@@ -4,12 +4,10 @@
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center h-16">
           <div class="flex items-center gap-3 group cursor-pointer">
-            <div class="w-10 h-10 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-xl flex items-center justify-center shadow-md shadow-emerald-200 group-hover:scale-105 transition">
-              <span class="text-white font-extrabold text-xl tracking-tighter">Rx</span>
-            </div>
+            <img src="/ikon.jpg" alt="Logo" class="w-10 h-10 object-contain group-hover:animate-spin-slow transition duration-500" />
             <div class="flex flex-col">
               <span class="text-xl font-black text-slate-900 tracking-tight leading-none">Pharma<span class="text-emerald-600">Prophet</span></span>
-              <span class="text-[10px] text-slate-400 font-medium tracking-wider uppercase mt-0.5">Predictive Intelligence</span>
+              <span class="text-[10px] text-slate-400 font-medium tracking-wider mt-0.5">Predictive Intelligence</span>
             </div>
           </div>
           
@@ -36,27 +34,23 @@
       
       <div class="grid lg:grid-cols-12 gap-12 items-center">
         <div class="space-y-6 lg:col-span-7 text-center lg:text-left animate-fade-in">
-          <div class="inline-flex items-center gap-2 bg-emerald-50 text-emerald-700 px-3 py-1.5 rounded-full text-xs font-semibold tracking-wide uppercase">
-            <span class="flex h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></span>
-            Powered by Facebook Prophet AI
-          </div>
-          <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black text-slate-950 tracking-tight leading-[1.1]">
-            Prediksi Stok Farmasi Jauh Lebih <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-600">Akurat</span>
+          <h1 class="text-4xl sm:text-5xl lg:text-4xl font-bold text-slate-950 tracking-tight leading-[1.1]">
+            Prediksi Stok Farmasi Jauh Lebih Akurat Dengan Kecerdasan Buatan
           </h1>
-          <p class="text-lg text-slate-600 max-w-2xl mx-auto lg:mx-0 font-medium leading-relaxed">
+          <p class="text-lg text-slate-600 max-w-2xl mx-auto lg:mx-0 font-normal leading-relaxed">
             Kendalikan inventaris apotek Anda secara cerdas. Cegah *stockout*, hindari obat kedaluwarsa, dan optimalkan pengadaan barang secara otomatis berbasis data historis.
           </p>
           <div class="flex flex-col sm:flex-row gap-4 pt-4 justify-center lg:justify-start">
-            <NuxtLink to="/register" class="px-8 py-3.5 bg-gradient-to-r from-emerald-500 to-teal-600 text-white rounded-xl font-bold hover:shadow-lg hover:shadow-emerald-200 transition tracking-wide text-center">
+            <NuxtLink to="/register" class="px-8 py-3.5 bg-gradient-to-r from-emerald-500 to-teal-600 text-white rounded-xl font-semibold hover:shadow-lg hover:shadow-emerald-200 transition tracking-wide text-center">
               Mulai Uji Coba Gratis
             </NuxtLink>
-            <button class="px-8 py-3.5 bg-white border border-slate-200 text-slate-700 rounded-xl font-bold hover:bg-slate-50 transition text-center shadow-sm">
+            <button class="px-8 py-3.5 bg-white border border-slate-200 text-slate-700 rounded-xl font-semibold hover:bg-slate-50 transition text-center shadow-sm">
               Lihat Demo Sistem
             </button>
           </div>
         </div>
 
-        <div class="lg:col-span-5 animate-slide-up">
+        <!-- <div class="lg:col-span-5 animate-slide-up">
           <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl relative">
             <div class="flex items-center justify-between border-b border-slate-800 pb-4 mb-6">
               <div class="flex items-center gap-2">
@@ -90,22 +84,22 @@
               </div>
             </div>
           </div>
-        </div>
+        </div> -->
+        <img src="/image.png" alt="Preview Dashboard" class="lg:col-span-5 animate-slide-up rounded-2xl shadow-xl shadow-slate-200 border border-slate-100 h-80 w-120" />
       </div>
     </section>
 
     <section id="features" class="bg-white border-y border-slate-100 py-24">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center max-w-3xl mx-auto mb-20">
-          <h2 class="text-3xl sm:text-4xl font-black text-slate-950 tracking-tight mb-4">Fitur Utama Platform</h2>
-          <p class="text-slate-600 font-medium">Dirancang khusus untuk kebutuhan manajemen operasional apotek modern dan efisien.</p>
+          <h2 class="text-3xl sm:text-4xl font-bold text-slate-950 tracking-tight mb-4">Fitur Utama Platform</h2>
+          <p class="text-slate-600 font-normal">Dirancang khusus untuk kebutuhan manajemen operasional apotek modern dan efisien.</p>
         </div>
         
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           <div class="border border-slate-100 bg-slate-50/50 p-8 rounded-2xl hover:bg-white hover:shadow-xl hover:shadow-slate-100 hover:border-emerald-500/20 transition-all duration-300 group">
-            <div class="w-12 h-12 bg-emerald-100 text-emerald-700 rounded-xl flex items-center justify-center text-xl font-bold mb-6 group-hover:bg-emerald-500 group-hover:text-white transition duration-300">🤖</div>
             <h3 class="text-lg font-bold text-slate-900 mb-2">Peramalan Time-Series AI</h3>
-            <p class="text-sm text-slate-600 leading-relaxed font-medium">
+            <p class="text-sm text-slate-600 leading-relaxed font-normal">
               Menggunakan library Prophet untuk mempelajari tren penjualan masa lalu guna memproyeksikan kebutuhan stok di masa depan secara berkala.
             </p>
           </div>
@@ -113,7 +107,7 @@
           <div class="border border-slate-100 bg-slate-50/50 p-8 rounded-2xl hover:bg-white hover:shadow-xl hover:shadow-slate-100 hover:border-emerald-500/20 transition-all duration-300 group">
             <div class="w-12 h-12 bg-emerald-100 text-emerald-700 rounded-xl flex items-center justify-center text-xl font-bold mb-6 group-hover:bg-emerald-500 group-hover:text-white transition duration-300">📦</div>
             <h3 class="text-lg font-bold text-slate-900 mb-2">Manajemen Inventori Cerdas</h3>
-            <p class="text-sm text-slate-600 leading-relaxed font-medium">
+            <p class="text-sm text-slate-600 leading-relaxed font-normal">
               Pantau kuantitas obat secara *real-time*, dapatkan sistem peringatan dini ketika stok menyentuh batas minimum aman (*safetystock*).
             </p>
           </div>
@@ -121,7 +115,7 @@
           <div class="border border-slate-100 bg-slate-50/50 p-8 rounded-2xl hover:bg-white hover:shadow-xl hover:shadow-slate-100 hover:border-emerald-500/20 transition-all duration-300 group">
             <div class="w-12 h-12 bg-emerald-100 text-emerald-700 rounded-xl flex items-center justify-center text-xl font-bold mb-6 group-hover:bg-emerald-500 group-hover:text-white transition duration-300">💰</div>
             <h3 class="text-lg font-bold text-slate-900 mb-2">Optimasi Finansial Bisnis</h3>
-            <p class="text-sm text-slate-600 leading-relaxed font-medium">
+            <p class="text-sm text-slate-600 leading-relaxed font-normal">
               Alokasikan modal belanja obat secara efisien. Hindari penumpukan dana mati akibat pembelian obat yang kurang laku di pasaran.
             </p>
           </div>
@@ -129,7 +123,7 @@
           <div class="border border-slate-100 bg-slate-50/50 p-8 rounded-2xl hover:bg-white hover:shadow-xl hover:shadow-slate-100 hover:border-emerald-500/20 transition-all duration-300 group">
             <div class="w-12 h-12 bg-emerald-100 text-emerald-700 rounded-xl flex items-center justify-center text-xl font-bold mb-6 group-hover:bg-emerald-500 group-hover:text-white transition duration-300">📈</div>
             <h3 class="text-lg font-bold text-slate-900 mb-2">Analisis Visual Komprehensif</h3>
-            <p class="text-sm text-slate-600 leading-relaxed font-medium">
+            <p class="text-sm text-slate-600 leading-relaxed font-normal">
               Sajikan laporan transaksi penjualan, margin keuntungan, dan performa pergerakan obat melalui grafik interaktif yang mudah dipahami.
             </p>
           </div>
@@ -137,7 +131,7 @@
           <div class="border border-slate-100 bg-slate-50/50 p-8 rounded-2xl hover:bg-white hover:shadow-xl hover:shadow-slate-100 hover:border-emerald-500/20 transition-all duration-300 group">
             <div class="w-12 h-12 bg-emerald-100 text-emerald-700 rounded-xl flex items-center justify-center text-xl font-bold mb-6 group-hover:bg-emerald-500 group-hover:text-white transition duration-300">🔐</div>
             <h3 class="text-lg font-bold text-slate-900 mb-2">Keamanan & Otorisasi Ketat</h3>
-            <p class="text-sm text-slate-600 leading-relaxed font-medium">
+            <p class="text-sm text-slate-600 leading-relaxed font-normal">
               Proteksi data medis privat apotek Anda menggunakan autentikasi JWT token yang aman dengan pembagian role akses pengguna yang terstruktur.
             </p>
           </div>
@@ -145,7 +139,7 @@
           <div class="border border-slate-100 bg-slate-50/50 p-8 rounded-2xl hover:bg-white hover:shadow-xl hover:shadow-slate-100 hover:border-emerald-500/20 transition-all duration-300 group">
             <div class="w-12 h-12 bg-emerald-100 text-emerald-700 rounded-xl flex items-center justify-center text-xl font-bold mb-6 group-hover:bg-emerald-500 group-hover:text-white transition duration-300">⚡</div>
             <h3 class="text-lg font-bold text-slate-900 mb-2">Responsif & Performa Kilat</h3>
-            <p class="text-sm text-slate-600 leading-relaxed font-medium">
+            <p class="text-sm text-slate-600 leading-relaxed font-normal">
               Dibangun di atas arsitektur FastAPI (Python) dan Nuxt 3 (Vue) yang super ringan untuk pengalaman manajemen tanpa hambatan.
             </p>
           </div>
@@ -156,8 +150,8 @@
     <section id="about" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
       <div class="grid lg:grid-cols-2 gap-12 items-center">
         <div class="space-y-6">
-          <h2 class="text-3xl sm:text-4xl font-black text-slate-950 tracking-tight">Mengapa Memilih Solusi Kami?</h2>
-          <p class="text-slate-600 font-medium leading-relaxed">
+          <h2 class="text-3xl sm:text-4xl font-bold text-slate-950 tracking-tight">Mengapa Memilih Solusi Kami?</h2>
+          <p class="text-slate-600 font-normal leading-relaxed">
             Kami menjembatani kompleksitas analisis data sains kecerdasan buatan menjadi sebuah sistem antarmuka yang siap pakai oleh staf operasional klinis atau apotek terkini.
           </p>
           <div class="space-y-4 pt-2">
@@ -165,14 +159,14 @@
               <div class="w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 shrink-0 font-bold text-sm">✓</div>
               <div>
                 <h4 class="font-bold text-slate-900 text-base">Akurasi Terkalibrasi</h4>
-                <p class="text-sm text-slate-600 font-medium">Algoritma secara konstan mengevaluasi galat eror untuk menghasilkan rekomendasi paling presisi.</p>
+                <p class="text-sm text-slate-600 font-normal">Algoritma secara konstan mengevaluasi galat eror untuk menghasilkan rekomendasi paling presisi.</p>
               </div>
             </div>
             <div class="flex gap-4 items-start">
               <div class="w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 shrink-0 font-bold text-sm">✓</div>
               <div>
                 <h4 class="font-bold text-slate-900 text-base">Alur Kerja Ramah Pengguna</h4>
-                <p class="text-sm text-slate-600 font-medium">Desain antarmuka minimalis terfokus, memangkas kurva belajar staf administrasi apotek.</p>
+                <p class="text-sm text-slate-600 font-normal">Desain antarmuka minimalis terfokus, memangkas kurva belajar staf administrasi apotek.</p>
               </div>
             </div>
           </div>
@@ -181,7 +175,7 @@
         <div class="bg-gradient-to-br from-emerald-500 to-teal-700 rounded-3xl p-10 text-white min-h-[350px] flex items-center relative shadow-xl shadow-emerald-100">
           <div class="space-y-4 max-w-md">
             <span class="text-4xl">💡</span>
-            <h3 class="text-2xl font-black tracking-tight">Efisiensi Rantai Pasok Farmasi Dimulai dari Sini</h3>
+            <h3 class="text-2xl font-bold tracking-tight">Efisiensi Rantai Pasok Farmasi Dimulai dari Sini</h3>
             <p class="text-emerald-100 text-sm leading-relaxed font-medium opacity-90">
               Hindari kerugian finansial akibat obat kedaluwarsa yang tidak terjual serta amankan ketersediaan obat-obatan kritis bagi pasien di saat yang krusial.
             </p>
@@ -192,12 +186,12 @@
 
     <section id="contact" class="bg-slate-900 text-white py-24 relative overflow-hidden">
       <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 space-y-6">
-        <h2 class="text-4xl font-black tracking-tight sm:text-5xl">Digitalisasi Apotek Anda Hari Ini</h2>
-        <p class="text-slate-400 text-lg max-w-2xl mx-auto font-medium">
+        <h2 class="text-4xl font-bold tracking-tight sm:text-4xl">Digitalisasi Apotek Anda Hari Ini</h2>
+        <p class="text-slate-400 text-lg max-w-2xl mx-auto font-normal">
           Tingkatkan akurasi manajemen operasional gudang farmasi Anda bersama keunggulan integrasi kecerdasan buatan PharmaProphet.
         </p>
         <div class="flex flex-col sm:flex-row gap-4 justify-center pt-6">
-          <NuxtLink to="/register" class="px-10 py-4 bg-emerald-500 text-slate-950 font-bold rounded-xl hover:bg-emerald-400 transition shadow-lg tracking-wide text-center">
+          <NuxtLink to="/register" class="px-10 py-4 bg-emerald-500 text-slate-950 font-medium rounded-xl hover:bg-emerald-400 transition shadow-lg tracking-wide text-center">
             Registrasi Akun Sekarang
           </NuxtLink>
         </div>
