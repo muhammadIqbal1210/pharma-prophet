@@ -1,11 +1,16 @@
 // composables/useAuth.ts
 export const useAuth = () => {
   const tokenCookie = useCookie('auth_token', {
-    maxAge: 60 * 60 * 24, // Cookie hangus dalam 1 hari
+    maxAge: 60 * 60 * 24,
     sameSite: 'lax',
   })
-  
-  const userState = useState('user_data', () => null)
+
+  const userCookie = useCookie('auth_user', {
+    maxAge: 60 * 60 * 24,
+    sameSite: 'lax',
+  })
+
+  const userState = useState('user_data', () => userCookie.value || null)
   const config = useRuntimeConfig()
 
   // 1. Fungsi Register
@@ -30,10 +35,10 @@ export const useAuth = () => {
         body: credentials
       })
       
-      // Simpan token ke cookie
       tokenCookie.value = response.access_token
-      
-      // Arahkan langsung ke dashboard
+      userCookie.value = response.user || null
+      userState.value = response.user || null
+
       navigateTo('/dashboard')
       return { success: true }
     } catch (error: any) {
@@ -44,9 +49,13 @@ export const useAuth = () => {
   // 3. Fungsi Logout
   const logout = () => {
     tokenCookie.value = null
+    userCookie.value = null
     userState.value = null
     navigateTo('/login')
   }
+
+  const currentUser = computed(() => (userState.value || userCookie.value) as Record<string, any> | null)
+  const isAdmin = computed(() => String(currentUser.value?.role || '').toLowerCase() === 'admin')
 
   // 4. Cek Status Login
   const isLoggedIn = computed(() => !!tokenCookie.value)
@@ -56,6 +65,8 @@ export const useAuth = () => {
     login,
     logout,
     isLoggedIn,
-    userState
+    userState,
+    currentUser,
+    isAdmin,
   }
 }
