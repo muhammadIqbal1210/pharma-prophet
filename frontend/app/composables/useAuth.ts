@@ -38,8 +38,7 @@ export const useAuth = () => {
       tokenCookie.value = response.access_token
       userCookie.value = response.user || null
       userState.value = response.user || null
-
-      navigateTo('/dashboard')
+      
       return { success: true }
     } catch (error: any) {
       throw error.data?.detail || 'Email atau password salah'
