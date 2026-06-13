@@ -75,7 +75,7 @@
 </template>
 
 <script setup>
-const { login } = useAuth()
+const { login , isAdmin} = useAuth()
 const form = ref({ email: '', password: '' })
 const loading = ref(false)
 const errorMsg = ref('')
@@ -85,6 +85,11 @@ const handleLogin = async () => {
   errorMsg.value = ''
   try {
     await login(form.value)
+    if (isAdmin.value){
+      navigateTo('/admin/dashboard')
+    } else {
+      navigateTo('/apoteker/dashboard')
+    }
   } catch (err) {
     errorMsg.value = err
   } finally {
