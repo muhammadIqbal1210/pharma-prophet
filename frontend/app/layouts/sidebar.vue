@@ -15,16 +15,21 @@ const pageTitle = computed(() => {
 })
 
 const mainMenu = [
-  { label: 'Dashboard', to: '/dashboard', icon: 'lucide:layout-dashboard' },
-  { label: 'Stok Obat', to: '/stock', icon: 'lucide:pill' }, // Diubah ke ikon pil kesehatan
-  { label: 'Transaksi', to: '/transactions', icon: 'lucide:receipt' },
-  { label: 'Produk', to: '/products', icon: 'lucide:package-plus' },
+  { label: 'Dashboard', to: '/apoteker/dashboard', icon: 'lucide:layout-dashboard' },
+  { label: 'Produk', to: '/apoteker/products', icon: 'lucide:package-plus' },
+  { label: 'Stok Obat', to: '/apoteker/stock', icon: 'lucide:pill' }, 
+  { label: 'Transaksi', to: '/apoteker/transactions', icon: 'lucide:receipt' },
+  { label: 'Prediksi', to: '/apoteker/prediksi', icon: 'lucide:cpu' },
 ]
 
 const adminMenu = [
   { label: 'Dashboard', to: '/admin/dashboard', icon: 'lucide:layout-dashboard' },
   { label: 'Manajemen User', to: '/admin/users', icon: 'lucide:user-cog' },
-  { label: 'Laporan', to: '/reports', icon: 'lucide:activity' }, // Diubah ke ikon aktivitas/grafik detak jantung
+  { label: 'Produk', to: '/admin/products', icon: 'lucide:package-plus' },
+  { label: 'Stok Obat', to: '/admin/stock', icon: 'lucide:pill' }, 
+  { label: 'Transaksi', to: '/admin/transactions', icon: 'lucide:receipt' },
+  { label: 'Prediksi', to: '/admin/prediksi', icon: 'lucide:cpu' },
+  { label: 'Laporan', to: '/admin/reports', icon: 'lucide:activity' }, 
 ]
 </script>
 
