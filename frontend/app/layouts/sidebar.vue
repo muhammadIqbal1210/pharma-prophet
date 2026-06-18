@@ -88,16 +88,6 @@ const adminMenu = [
           <Icon name="lucide:log-out" class="text-lg text-rose-400/70 group-hover:text-rose-400" />
           Keluar Sistem
         </button>
-
-        <div class="rounded-xl border border-teal-900 bg-teal-950/80 p-3.5 flex items-center justify-between shadow-inner">
-          <div>
-            <p class="text-[9px] font-bold uppercase tracking-widest text-teal-500">Akses Petugas</p>
-            <p class="mt-0.5 text-xs font-bold text-white tracking-wide truncate max-w-[120px]">{{ isAdmin ? 'Sistem Manajer' : 'Apoteker Jaga' }}</p>
-          </div>
-          <span :class="isAdmin ? 'bg-amber-500/10 text-amber-400 border-amber-500/20' : 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'" class="px-2 py-0.5 text-[10px] font-extrabold rounded-md border uppercase tracking-wider">
-            {{ isAdmin ? 'ADMIN' : 'FARMASI' }}
-          </span>
-        </div>
       </div>
     </aside>
 
