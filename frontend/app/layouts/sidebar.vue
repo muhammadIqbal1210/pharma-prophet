@@ -19,7 +19,7 @@ const mainMenu = [
   { label: 'Produk', to: '/apoteker/products', icon: 'lucide:package-plus' },
   { label: 'Stok Obat', to: '/apoteker/stock', icon: 'lucide:pill' }, 
   { label: 'Transaksi', to: '/apoteker/transactions', icon: 'lucide:receipt' },
-  { label: 'Prediksi', to: '/apoteker/prediksi', icon: 'lucide:cpu' },
+  { label: 'Prediksi Stok', to: '/apoteker/prediksi', icon: 'lucide:cpu' },
 ]
 
 const adminMenu = [
@@ -28,84 +28,124 @@ const adminMenu = [
   { label: 'Produk', to: '/admin/products', icon: 'lucide:package-plus' },
   { label: 'Stok Obat', to: '/admin/stock', icon: 'lucide:pill' }, 
   { label: 'Transaksi', to: '/admin/transactions', icon: 'lucide:receipt' },
-  { label: 'Prediksi', to: '/admin/prediksi', icon: 'lucide:cpu' },
-  { label: 'Laporan', to: '/admin/reports', icon: 'lucide:activity' }, 
+  { label: 'Prediksi Stok', to: '/admin/prediksi', icon: 'lucide:cpu' },
+  { label: 'Laporan Penjualan', to: '/admin/reports', icon: 'lucide:activity' }, 
 ]
 </script>
 
 <template>
-  <div class="flex min-h-screen bg-slate-50 text-slate-800 font-sans antialiased">
-    <aside class="w-72 shrink-0 border-r border-teal-900 bg-teal-950 text-teal-100 shadow-xl flex flex-col justify-between">
-      
+  <div class="flex h-screen w-screen bg-slate-50 text-slate-800 font-sans antialiased overflow-hidden">
+    <aside class="w-72 h-full sticky top-0 shrink-0 border-r border-slate-200 bg-white text-slate-700 flex flex-col justify-between overflow-y-auto">
       <div>
-        <div class="p-6 border-b border-teal-900 bg-teal-950/60">
+        <div class="p-6 border-b border-slate-100">
           <div class="flex items-center gap-3">
             <img src="/ikon.jpg" alt="Logo Pharma Prophet" class="h-11 w-11 rounded-xl object-cover shadow-md ring-2 ring-emerald-400/30" />
             <div class="min-w-0">
-              <h2 class="text-lg font-extrabold text-white tracking-tight">PharmaCast</h2>
-              <p class="text-emerald-400 font-medium text-[11px] truncate tracking-wider mt-0.5 ">Sistem Manajemen Inventory dan Penjualan Apotek</p>
+              <h2 class="text-lg font-bold text-slate-900 tracking-tight leading-none">Pharma Cast</h2>
+              <p class="text-slate-400 font-semibold text-[10px] tracking-tight mt-1 leading-snug">
+                Sistem Manajemen Inventory dan Penjualan Apotek
+              </p>
             </div>
           </div>
         </div>
 
-        <nav class="p-4 space-y-1.5">
+        <nav class="p-4 space-y-1">
           <template v-if="!isAdmin">
-            <p class="px-3 pb-2 text-[10px] font-bold uppercase tracking-widest text-teal-500">Layanan Apoteker</p>
+            <p class="px-2 pb-2 text-[10px] font-semibold uppercase tracking-widest text-slate-400">Menu Utama</p>
             <NuxtLink
               v-for="item in mainMenu"
               :key="item.to"
               :to="item.to"
-              class="flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold text-teal-300/70 transition-all duration-200 hover:bg-teal-900/50 hover:text-white group"
-              active-class="bg-emerald-600 !text-white shadow-md shadow-emerald-600/20 ring-1 ring-emerald-400/30"
+              class="flex items-center gap-3 rounded-xl px-4 py-2 text-sm font-semibold text-slate-600 transition-all duration-200 hover:bg-slate-50 hover:text-emerald-600 group"
+              active-class="bg-emerald-50 !text-emerald-700 border border-emerald-100/50"
             >
-              <Icon :name="item.icon" class="text-lg text-teal-400/60 group-hover:text-emerald-400 transition-colors" />
+              <div class="w-8 h-8 rounded-lg bg-slate-100 group-hover:bg-emerald-100/60 transition-colors flex items-center justify-center shrink-0"
+                   :class="route.path === item.to ? '!bg-emerald-100 text-emerald-600' : 'text-slate-400 group-hover:text-emerald-600'">
+                <Icon :name="item.icon" class="text-base" />
+              </div>
               {{ item.label }}
             </NuxtLink>
           </template>
 
           <template v-if="isAdmin">
-            <p class="px-3 pb-2 text-[10px] font-bold uppercase tracking-widest text-teal-500">Sistem Administrator</p>
-            <NuxtLink
-              v-for="item in adminMenu"
-              :key="item.to"
-              :to="item.to"
-              class="flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold text-teal-300/70 transition-all duration-200 hover:bg-teal-900/50 hover:text-white group"
-              active-class="bg-emerald-600 !text-white shadow-md shadow-emerald-600/20 ring-1 ring-emerald-400/30"
-            >
-              <Icon :name="item.icon" class="text-lg text-teal-400/60 group-hover:text-emerald-400 transition-colors" />
-              {{ item.label }}
-            </NuxtLink>
+            <p class="px-4 text-[10px] font-semibold uppercase tracking-widest text-slate-400">Sistem Admin</p>
+            <div class="space-y-1">
+              <NuxtLink
+                v-for="item in adminMenu.slice(0, 6)"
+                :key="item.to"
+                :to="item.to"
+                class="flex items-center gap-3 rounded-xl px-4 py-2 text-sm font-semibold text-slate-600 transition-all duration-200 hover:bg-slate-50 hover:text-emerald-600 group"
+                active-class="bg-emerald-50 !text-emerald-700 border border-emerald-100/50"
+              >
+                <div class="w-8 h-8 rounded-lg bg-slate-100 group-hover:bg-emerald-100/60 transition-colors flex items-center justify-center shrink-0"
+                     :class="route.path === item.to ? '!bg-emerald-100 text-emerald-600' : 'text-slate-400 group-hover:text-emerald-600'">
+                  <Icon :name="item.icon" class="text-base" />
+                </div>
+                {{ item.label }}
+              </NuxtLink>
+            </div>
+
+            <div class="pt-5 space-y-1">
+              <p class="px-4 pb-2 text-[10px] font-semibold uppercase tracking-widest text-slate-400">Laporan</p>
+              <NuxtLink
+                :to="adminMenu[6].to"
+                class="flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold text-slate-600 transition-all duration-200 hover:bg-slate-50 hover:text-emerald-600 group"
+                active-class="bg-emerald-50 !text-emerald-700 border border-emerald-100/50"
+              >
+                <div class="w-8 h-8 rounded-lg bg-slate-100 group-hover:bg-emerald-100/60 transition-colors flex items-center justify-center shrink-0"
+                     :class="route.path === adminMenu[6].to ? '!bg-emerald-100 text-emerald-600' : 'text-slate-400 group-hover:text-emerald-600'">
+                  <Icon :name="adminMenu[6].icon" class="text-base" />
+                </div>
+                {{ adminMenu[6].label }}
+              </NuxtLink>
+            </div>
           </template>
         </nav>
       </div>
 
-      <div class="p-4 border-t border-teal-900 bg-teal-950/40 space-y-3">
+      <div class="p-4 border-t border-slate-100 space-y-3 bg-slate-50/50">
+        <div class="flex items-center gap-3 px-2 py-1">
+          <div class="w-10 h-10 bg-emerald-600/10 text-emerald-700 rounded-xl shrink-0 flex items-center justify-center text-sm font-bold border border-emerald-200/50">
+            {{ (currentUser?.nama_lengkap || '').charAt(0) }}
+          </div>
+          <div class="min-w-0 leading-tight">
+            <h4 class="text-xs font-bold text-slate-900 truncate">
+              {{ currentUser?.nama_lengkap || '' }}
+            </h4>
+            <p class="text-[10px] font-semibold text-slate-400 truncate mt-0.5 capitalize">
+              {{ currentUser.role }}
+            </p>
+          </div>
+        </div>
+
         <button
           type="button"
           @click="logout"
-          class="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold text-rose-300 transition-colors hover:bg-rose-950/40 hover:text-rose-200 group"
+          class="flex w-full items-center gap-3 rounded-xl px-4 py-2.5 text-sm font-semibold text-rose-600 hover:bg-rose-50 transition-colors group"
         >
-          <Icon name="lucide:log-out" class="text-lg text-rose-400/70 group-hover:text-rose-400" />
-          Keluar Sistem
+          <div class="w-8 h-8 rounded-lg bg-rose-50 group-hover:bg-rose-100 transition-colors flex items-center justify-center shrink-0 text-rose-500">
+            <Icon name="lucide:log-out" class="text-base" />
+          </div>
+          Keluar
         </button>
       </div>
     </aside>
 
     <div class="flex min-h-screen flex-1 flex-col overflow-hidden">
-      <header class="border-b border-slate-200/80 bg-white/90 px-8 py-4 shadow-sm backdrop-blur-md flex items-center justify-between gap-4">
+      <header class="border-b border-slate-200 bg-white px-8 py-4 flex items-center justify-between gap-4">
         <div class="min-w-0">
-          <h1 class="text-xl font-semibold text-slate-900 tracking-tight mt-0.5 truncate">{{ pageTitle }}</h1>
+          <h1 class="text-base font-bold text-slate-900 tracking-tight">{{ pageTitle }}</h1>
         </div>
         
         <div class="flex items-center gap-3 shrink-0">
-          <div class="bg-emerald-50/60 border border-emerald-100 rounded-xl px-4 py-2 text-sm text-emerald-800 shadow-sm flex items-center gap-2">
-            <Icon name="lucide:shield-check" class="text-emerald-600 text-base" />
-            <span>Sesi Aktif: <strong class="text-slate-900 font-bold">{{ currentUser?.nama_lengkap || currentUser?.username || 'User' }}</strong></span>
+          <div class="bg-slate-50 border border-slate-200 rounded-xl px-4 py-1.5 text-xs text-slate-600 flex items-center gap-2 font-bold shadow-sm">
+            <div class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
+            <span>Sesi: {{ currentUser?.username || 'iqbal' }}</span>
           </div>
         </div>
       </header>
 
-      <main class="flex-1 overflow-y-auto p-8 bg-slate-50/40">
+      <main class="flex-1 overflow-y-auto p-8 bg-slate-50/60">
         <slot />
       </main>
     </div>
