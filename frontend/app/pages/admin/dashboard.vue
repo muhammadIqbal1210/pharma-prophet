@@ -7,6 +7,28 @@ const config = useRuntimeConfig()
 const { currentUser } = useAuth()
 const tokenCookie = useCookie('auth_token')
 
+import { Line } from 'vue-chartjs'
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+} from 'chart.js'
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+)
+
 // penembakan API mentah agar status pending & error-nya terpusat satu pintu
 const { data: dashboardData, pending, error } = await useAsyncData('admin-dashboard', async () => {
   const headers = { 
@@ -29,7 +51,92 @@ const { data: dashboardData, pending, error } = await useAsyncData('admin-dashbo
     totalProducts: products?.length || products?.total_stock || 0,
     totalTransactions: transactions?.length || transactions?.today_transactions || 0,
     lowStockCount: stockData?.length || stockData?.low_stock_count || 0,
-    latestUsers: latestUsers
+    latestUsers: latestUsers,
+    rawTransactions: transactions
+  }
+})
+
+// --- GRAFIK PENDAPATAN ---
+const today = new Date()
+const thirtyDaysAgo = new Date(today)
+thirtyDaysAgo.setDate(today.getDate() - 30)
+
+const startDate = ref(thirtyDaysAgo.toISOString().split('T')[0])
+const endDate = ref(today.toISOString().split('T')[0])
+
+const chartData = computed(() => {
+  const start = new Date(startDate.value)
+  const end = new Date(endDate.value)
+  end.setHours(23, 59, 59, 999)
+
+  const dateMap = {}
+  let currDate = new Date(start)
+  while (currDate <= end) {
+    const dStr = currDate.toLocaleDateString('id-ID', { day: '2-digit', month: 'short' })
+    dateMap[dStr] = 0
+    currDate.setDate(currDate.getDate() + 1)
+  }
+
+  if (dashboardData.value?.rawTransactions) {
+    dashboardData.value.rawTransactions.forEach(t => {
+      const d = new Date(t.tanggal)
+      if (d >= start && d <= end) {
+        const dStr = d.toLocaleDateString('id-ID', { day: '2-digit', month: 'short' })
+        if (dateMap[dStr] !== undefined) {
+          // Asumsi `t.total_harga` adalah nominal pendapatan
+          dateMap[dStr] += t.total_harga || 0
+        }
+      }
+    })
+  }
+
+  return {
+    labels: Object.keys(dateMap),
+    datasets: [
+      {
+        label: 'Pendapatan (Rp)',
+        backgroundColor: '#10b981',
+        borderColor: '#10b981',
+        data: Object.values(dateMap),
+        tension: 0.4,
+        fill: true,
+        backgroundColor: 'rgba(16, 185, 129, 0.1)'
+      }
+    ]
+  }
+})
+
+const chartOptions = ref({
+  responsive: true,
+  maintainAspectRatio: false,
+  plugins: {
+    legend: { display: false },
+    tooltip: {
+      mode: 'index',
+      intersect: false,
+      callbacks: {
+        label: function(context) {
+          let label = context.dataset.label || '';
+          if (label) {
+            label += ': ';
+          }
+          if (context.parsed.y !== null) {
+            label += new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(context.parsed.y);
+          }
+          return label;
+        }
+      }
+    }
+  },
+  scales: {
+    y: {
+      beginAtZero: true,
+      ticks: {
+        callback: function(value, index, values) {
+          return new Intl.NumberFormat('id-ID', { notation: 'compact', compactDisplay: 'short' }).format(value);
+        }
+      }
+    }
   }
 })
 </script>
@@ -97,6 +204,24 @@ const { data: dashboardData, pending, error } = await useAsyncData('admin-dashbo
           </div>
         </div>
 
+      </div>
+
+      <!-- Grafik Pendapatan -->
+      <div class="bg-white shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          <div>
+            <h3 class="text-base font-bold text-slate-900">Tren Pendapatan</h3>
+            <p class="text-xs text-slate-500">Akumulasi pendapatan transaksi per hari berdasarkan rentang waktu.</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <input type="date" v-model="startDate" class="text-sm border border-slate-300 rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
+            <span class="text-slate-500 text-sm">s/d</span>
+            <input type="date" v-model="endDate" class="text-sm border border-slate-300 rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
+          </div>
+        </div>
+        <div class="h-72 w-full">
+          <Line :data="chartData" :options="chartOptions" />
+        </div>
       </div>
 
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
