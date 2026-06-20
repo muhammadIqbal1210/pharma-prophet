@@ -59,7 +59,7 @@ const { data: dashboardData, pending, error } = await useAsyncData('admin-dashbo
         
         <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex items-center justify-between">
           <div>
-            <p class="text-sm font-medium text-slate-400">Total Pengguna</p>
+            <p class="text-xs font-medium text-slate-400 uppercase">Total Pengguna</p>
             <h3 class="text-3xl font-bold text-slate-800 mt-1">{{ dashboardData?.totalUsers }}</h3>
           </div>
           <div class="p-3 bg-emerald-50 text-emerald-600 rounded-xl text-xl flex items-center justify-center">
@@ -69,7 +69,7 @@ const { data: dashboardData, pending, error } = await useAsyncData('admin-dashbo
 
         <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex items-center justify-between">
           <div>
-            <p class="text-sm font-medium text-slate-400">Total Jenis Obat</p>
+            <p class="text-xs font-medium text-slate-400 uppercase">Total Jenis Obat</p>
             <h3 class="text-3xl font-bold text-slate-800 mt-1">{{ dashboardData?.totalProducts }}</h3>
           </div>
           <div class="p-3 bg-blue-50 text-blue-600 rounded-xl text-xl flex items-center justify-center">
