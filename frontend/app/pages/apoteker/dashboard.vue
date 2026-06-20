@@ -124,54 +124,56 @@ const produkTerlarisList = computed(() => {
 
 <template>
   <div class="space-y-6">
-    <div class="bg-gradient-to-r from-emerald-500 to-green-600 rounded-2xl p-6 text-white shadow-md">
-      <h2 class="text-2xl font-bold mb-1">Selamat Datang di Panel Apoteker</h2>
-      <p class="text-emerald-100 text-sm">Gunakan menu navigasi untuk mengelola stok obat dan transaksi penjualan hari ini.</p>
+    <div>
+      <h1 class="text-2xl font-bold text-slate-900 tracking-tight">
+        Selamat Datang Kembali, {{ currentUser?.nama_lengkap || 'Apoteker' }}!
+      </h1>
+      <p class="text-sm text-slate-500">Berikut ringkasan indikator penting operasional apotek saat ini.</p>  
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-      <div class="bg-slate-100/80 p-6 rounded-2xl border border-slate-200/60 flex justify-between items-start shadow-sm">
+      <div class="bg-white p-6 rounded-2xl border border-slate-200/60 flex justify-between items-start shadow-sm">
         <div class="space-y-1">
-          <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Total Produk</p>
-          <h2 class="text-4xl font-bold text-slate-900">{{ totalProduk }}</h2>
+          <p class="text-xs font-medium text-slate-400 uppercase tracking-wider">Total Produk</p>
+          <h3 class="text-3xl font-bold text-slate-800 mt-1">{{ totalProduk }}</h3>
           <p class="text-xs text-slate-500 font-medium">dalam database</p>
         </div>
-        <div class="w-12 h-12 bg-slate-300 rounded-xl flex items-center justify-center text-slate-600">
-          <Icon name="lucide:package" class="text-xl" />
+        <div class="p-3 bg-blue-50 text-blue-600 rounded-xl text-2xl flex items-center justify-center">
+          <Icon name="lucide:box" />
         </div>
       </div>
 
-      <div class="bg-slate-100/80 p-6 rounded-2xl border border-slate-200/60 flex justify-between items-start shadow-sm">
+      <div class="bg-white p-6 rounded-2xl border border-slate-200/60 flex justify-between items-start shadow-sm">
         <div class="space-y-1">
-          <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Stok Krisis</p>
-          <h2 class="text-4xl font-bold text-amber-600">{{ stokKrisisCount }}</h2>
+          <p class="text-xs font-medium text-slate-400 uppercase tracking-wider">Stok Krisis</p>
+          <h2 class="text-4xl font-bold text-rose-600">{{ stokKrisisCount }}</h2>
           <p class="text-xs text-slate-500 font-medium">perlu perhatian</p>
         </div>
-        <div class="w-12 h-12 bg-slate-300 rounded-xl flex items-center justify-center text-slate-600">
-          <Icon name="lucide:alert-triangle" class="text-xl" />
+        <div class="p-3 bg-rose-50 text-rose-600 rounded-xl text-xl flex items-center justify-center">
+          <Icon name="lucide:alert-triangle" />
         </div>
       </div>
 
-      <div class="bg-slate-100/80 p-6 rounded-2xl border border-slate-200/60 flex justify-between items-start shadow-sm">
+      <div class="bg-white p-6 rounded-2xl border border-slate-200/60 flex justify-between items-start shadow-sm">
         <div class="space-y-1">
-          <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Transaksi</p>
+          <p class="text-xs font-medium text-slate-400 uppercase tracking-wider">Transaksi</p>
           <h2 class="text-4xl font-bold text-slate-900">{{ totalTransaksi }}</h2>
           <p class="text-xs text-slate-500 font-medium">transaksi penjualan</p>
         </div>
-        <div class="w-12 h-12 bg-slate-300 rounded-xl flex items-center justify-center text-slate-600">
-          <Icon name="lucide:shopping-bag" class="text-xl" />
+        <div class="p-3 bg-amber-50 text-amber-600 rounded-xl text-2xl flex items-center justify-center">
+          <Icon name="lucide:shopping-cart" />
         </div>
       </div>
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
       
-      <div class="bg-slate-100/50 p-6 rounded-2xl border border-slate-200/40 space-y-4">
+      <div class="bg-white shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4">
         <h3 class="text-base font-bold text-slate-900">Peringatan Stok Rendah</h3>
         <div class="space-y-3">
           <div v-for="item in stokRendahList" :key="item.id" class="flex justify-between items-center text-sm font-semibold">
             <span class="text-slate-700">{{ item.nama_produk }}</span>
-            <span class="text-rose-600 bg-rose-50 px-2.5 py-0.5 rounded-md border border-rose-100 text-xs font-bold font-mono">
+            <span class="text-rose-600 bg-rose-50 px-2.5 py-0.5 rounded-md border border-rose-100 text-xs font-medium font-mono">
               {{ item.stok_saat_ini }} {{ item.satuan || 'Strip' }}
             </span>
           </div>
@@ -179,17 +181,17 @@ const produkTerlarisList = computed(() => {
         </div>
       </div>
 
-      <div class="bg-slate-100/50 p-6 rounded-2xl border border-slate-200/40 space-y-4">
+      <div class="bg-white shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4">
         <h3 class="text-base font-bold text-slate-900">Stok Terbaru</h3>
         <div class="space-y-3">
           <div v-for="item in stokTerbaruList" :key="item.id" class="flex justify-between items-center text-sm font-semibold">
             <div class="flex items-center gap-2">
-              <span :class="item.type === 'Masuk' ? 'text-emerald-600' : 'text-rose-500'" class="text-xs font-bold uppercase tracking-tight">
+              <span :class="item.type === 'Masuk' ? 'text-emerald-600' : 'text-rose-500'" class="text-xs font-semibold tracking-tight">
                 [{{ item.type }}]
               </span>
               <span class="text-slate-700">{{ item.nama_produk }}</span>
             </div>
-            <span class="text-slate-400 text-xs font-mono">
+            <span class="text-slate-400 text-xs font-semibold">
               {{ new Date(item.tanggal_update).toLocaleDateString('id-ID', { day: '2-digit', month: '2-digit', year: '2-digit' }) }}
             </span>
           </div>
@@ -197,11 +199,11 @@ const produkTerlarisList = computed(() => {
         </div>
       </div>
 
-      <div class="bg-slate-100/50 p-6 rounded-2xl border border-slate-200/40 space-y-4">
+      <div class="bg-white p-6 rounded-2xl border border-slate-200 space-y-4">
         <h3 class="text-base font-bold text-slate-900">Aktivitas Anda</h3>
         <div class="space-y-4">
           <div v-for="(act, idx) in aktivitasList" :key="idx" class="space-y-0.5">
-            <p class="text-sm font-bold text-slate-800">{{ act.teks }}</p>
+            <p class="text-sm font-semibold text-slate-800">{{ act.teks }}</p>
             <p class="text-[11px] font-medium text-slate-400 font-mono">
               {{ new Date(act.tanggal).toLocaleDateString('id-ID', { year: 'numeric', month: '2-digit', day: '2-digit' }) }}
             </p>
@@ -210,7 +212,7 @@ const produkTerlarisList = computed(() => {
         </div>
       </div>
 
-      <div class="bg-slate-100/50 p-6 rounded-2xl border border-slate-200/40 space-y-4">
+      <div class="bg-white shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4">
         <h3 class="text-base font-bold text-slate-900">Produk Terlaris</h3>
         <div class="space-y-3">
           <div v-for="(item, idx) in produkTerlarisList" :key="idx" class="flex justify-between items-center text-sm font-semibold">
