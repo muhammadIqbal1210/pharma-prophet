@@ -60,10 +60,6 @@ const deleteStock = async (id) => {
         <h1 class="text-2xl font-bold text-slate-900">Manajemen Stok</h1>
         <p class="text-sm text-slate-500">Kelola stok produk yang tersedia di dalam sistem.</p>
       </div>
-      <NuxtLink to="/admin/stock/create" class="px-4 py-2.5 bg-emerald-600 text-white font-semibold rounded-xl hover:bg-emerald-700 transition text-sm flex items-center gap-1 shadow-sm">
-        <Icon name="lucide:package-plus" class="text-base" />
-        Tambah Stok
-      </NuxtLink>
     </div>
 
     <div v-if="stockPending" class="text-center py-12 text-slate-500">
