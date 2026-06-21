@@ -7,13 +7,14 @@ const config = useRuntimeConfig()
 const { currentUser } = useAuth()
 const tokenCookie = useCookie('auth_token')
 
-import { Line } from 'vue-chartjs'
+import { Line, Pie } from 'vue-chartjs'
 import {
   Chart as ChartJS,
   CategoryScale,
   LinearScale,
   PointElement,
   LineElement,
+  ArcElement,
   Title,
   Tooltip,
   Legend
@@ -24,6 +25,7 @@ ChartJS.register(
   LinearScale,
   PointElement,
   LineElement,
+  ArcElement,
   Title,
   Tooltip,
   Legend
@@ -52,7 +54,8 @@ const { data: dashboardData, pending, error } = await useAsyncData('admin-dashbo
     totalTransactions: transactions?.length || transactions?.today_transactions || 0,
     lowStockCount: stockData?.length || stockData?.low_stock_count || 0,
     latestUsers: latestUsers,
-    rawTransactions: transactions
+    rawTransactions: transactions,
+    rawProducts: Array.isArray(products) ? products : []
   }
 })
 
@@ -139,6 +142,63 @@ const chartOptions = ref({
     }
   }
 })
+
+// --- GRAFIK PIE PRODUK TERLARIS ---
+const pieChartData = computed(() => {
+  const start = new Date(startDate.value)
+  const end = new Date(endDate.value)
+  end.setHours(23, 59, 59, 999)
+
+  const productMap = {}
+
+  if (dashboardData.value?.rawTransactions) {
+    dashboardData.value.rawTransactions.forEach(t => {
+      const d = new Date(t.tanggal)
+      if (d >= start && d <= end) {
+        if (t.items) {
+          t.items.forEach(item => {
+            const name = item.product?.nama_produk || `Produk #${item.product_id}`
+            if (!productMap[name]) productMap[name] = 0
+            productMap[name] += item.jumlah
+          })
+        }
+      }
+    })
+  }
+
+  const sortedProducts = Object.keys(productMap)
+    .map(key => ({ name: key, count: productMap[key] }))
+    .sort((a, b) => b.count - a.count)
+    .slice(0, 5)
+
+  return {
+    labels: sortedProducts.map(p => p.name),
+    datasets: [
+      {
+        backgroundColor: ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'],
+        data: sortedProducts.map(p => p.count),
+        borderWidth: 1
+      }
+    ]
+  }
+})
+
+const pieChartOptions = ref({
+  responsive: true,
+  maintainAspectRatio: false,
+  plugins: {
+    legend: { position: 'bottom', labels: { boxWidth: 12 } }
+  }
+})
+
+// --- STOK KRISIS LIST ---
+const stokRendahList = computed(() => {
+  if (!dashboardData.value?.rawProducts) return []
+  return dashboardData.value.rawProducts
+    .filter(p => p.stok_saat_ini <= p.stok_minimum)
+    .sort((a, b) => a.stok_saat_ini - b.stok_saat_ini)
+    .slice(0, 5)
+})
 </script>
 
 <template>
@@ -186,7 +246,7 @@ const chartOptions = ref({
 
         <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex items-center justify-between">
           <div>
-            <p class="text-sm font-medium text-slate-400">Total Transaksi</p>
+            <p class="text-xs font-medium text-slate-400 uppercase">Total Transaksi</p>
             <h3 class="text-3xl font-bold text-slate-800 mt-1">{{ dashboardData?.totalTransactions }}</h3>
           </div>
           <div class="p-3 bg-amber-50 text-amber-600 rounded-xl text-xl flex items-center justify-center">
@@ -196,7 +256,7 @@ const chartOptions = ref({
 
         <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex items-center justify-between">
           <div>
-            <p class="text-sm font-medium text-slate-400">Stok Hampir Habis</p>
+            <p class="text-xs font-medium text-slate-400 uppercase">Stok Hampir Habis</p>
             <h3 class="text-3xl font-bold text-rose-600 mt-1">{{ dashboardData?.lowStockCount }}</h3>
           </div>
           <div class="p-3 bg-rose-50 text-rose-600 rounded-xl text-xl flex items-center justify-center">
@@ -206,21 +266,40 @@ const chartOptions = ref({
 
       </div>
 
-      <!-- Grafik Pendapatan -->
-      <div class="bg-white shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4">
-        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-          <div>
-            <h3 class="text-base font-bold text-slate-900">Tren Pendapatan</h3>
-            <p class="text-xs text-slate-500">Akumulasi pendapatan transaksi per hari berdasarkan rentang waktu.</p>
+      <!-- Grafik dan Pie Chart Section -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Grafik Pendapatan -->
+        <div class="bg-white shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4 lg:col-span-2">
+          <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <div>
+              <h3 class="text-base font-bold text-slate-900">Tren Pendapatan</h3>
+              <p class="text-xs text-slate-500">Akumulasi pendapatan transaksi per hari berdasarkan rentang waktu.</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <input type="date" v-model="startDate" class="text-sm border border-slate-300 rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
+              <span class="text-slate-500 text-sm">s/d</span>
+              <input type="date" v-model="endDate" class="text-sm border border-slate-300 rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
+            </div>
           </div>
-          <div class="flex items-center gap-2">
-            <input type="date" v-model="startDate" class="text-sm border border-slate-300 rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
-            <span class="text-slate-500 text-sm">s/d</span>
-            <input type="date" v-model="endDate" class="text-sm border border-slate-300 rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
+          <div class="h-72 w-full">
+            <Line :data="chartData" :options="chartOptions" />
           </div>
         </div>
-        <div class="h-72 w-full">
-          <Line :data="chartData" :options="chartOptions" />
+
+        <!-- Pie Chart Produk Terlaris -->
+        <div class="bg-white shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4">
+          <div>
+            <h3 class="text-base font-bold text-slate-900">Produk Terlaris</h3>
+            <p class="text-xs text-slate-500">Berdasarkan rentang waktu di atas.</p>
+          </div>
+          <div class="h-64 w-full flex justify-center">
+            <div v-if="pieChartData.labels.length > 0" class="w-full h-full">
+              <Pie :data="pieChartData" :options="pieChartOptions" />
+            </div>
+            <div v-else class="flex items-center justify-center h-full w-full">
+              <p class="text-xs text-slate-400 italic">Tidak ada transaksi di rentang waktu ini.</p>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -278,6 +357,25 @@ const chartOptions = ref({
           <NuxtLink to="/admin/prediksi" class="w-full py-2.5 mt-4 text-center block bg-slate-50 border border-slate-200 text-slate-700 font-semibold rounded-xl hover:bg-slate-100 text-sm transition">
             Buka Panel Prediksi Stok
           </NuxtLink>
+        </div>
+
+        <!-- Stok Krisis List (Tambahan Admin) -->
+        <div class="bg-white shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4">
+          <div class="flex justify-between items-center">
+            <h3 class="text-base font-bold text-slate-900">Peringatan Stok Rendah</h3>
+            <div class="p-1.5 bg-rose-50 text-rose-600 rounded-lg">
+              <Icon name="lucide:alert-circle" class="w-4 h-4" />
+            </div>
+          </div>
+          <div class="space-y-3">
+            <div v-for="item in stokRendahList" :key="item.id" class="flex justify-between items-center text-sm font-semibold">
+              <span class="text-slate-700">{{ item.nama_produk }}</span>
+              <span class="text-rose-600 bg-rose-50 px-2.5 py-0.5 rounded-md border border-rose-100 text-xs font-medium font-mono">
+                {{ item.stok_saat_ini }} {{ item.satuan || 'Strip' }}
+              </span>
+            </div>
+            <p v-if="!stokRendahList.length" class="text-xs text-slate-400 italic">Semua aman, tidak ada stok krisis.</p>
+          </div>
         </div>
       </div>
     </div>
