@@ -110,7 +110,7 @@ const adminMenu = [
           </div>
           <div class="min-w-0 leading-tight">
             <h4 class="text-xs font-bold text-slate-900 truncate">
-              {{ currentUser?.nama_lengkap || '' }}
+              {{ currentUser?.nama_lengkap || currentUser?.username || 'Pengguna' }}
             </h4>
             <p class="text-[10px] font-semibold text-slate-400 truncate mt-0.5 capitalize">
               {{ currentUser.role }}
@@ -140,7 +140,7 @@ const adminMenu = [
         <div class="flex items-center gap-3 shrink-0">
           <div class="bg-slate-50 border border-slate-200 rounded-xl px-4 py-1.5 text-xs text-slate-600 flex items-center gap-2 font-bold shadow-sm">
             <div class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
-            <span>Sesi: {{ currentUser?.username || 'iqbal' }}</span>
+            <span>Sesi: {{ currentUser?.nama_lengkap || currentUser?.username || 'Pengguna' }}</span>
           </div>
         </div>
       </header>
