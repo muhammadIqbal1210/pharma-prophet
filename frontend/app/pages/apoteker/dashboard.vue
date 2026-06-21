@@ -7,13 +7,14 @@ definePageMeta({
 const config = useRuntimeConfig()
 const { currentUser } = useAuth()
 
-import { Line } from 'vue-chartjs'
+import { Line, Pie } from 'vue-chartjs'
 import {
   Chart as ChartJS,
   CategoryScale,
   LinearScale,
   PointElement,
   LineElement,
+  ArcElement,
   Title,
   Tooltip,
   Legend
@@ -24,6 +25,7 @@ ChartJS.register(
   LinearScale,
   PointElement,
   LineElement,
+  ArcElement,
   Title,
   Tooltip,
   Legend
@@ -209,6 +211,54 @@ const chartOptions = ref({
     }
   }
 })
+
+// --- GRAFIK PIE PRODUK TERLARIS ---
+const pieChartData = computed(() => {
+  const start = new Date(startDate.value)
+  const end = new Date(endDate.value)
+  end.setHours(23, 59, 59, 999)
+
+  const productMap = {}
+
+  if (rawTransactions.value) {
+    rawTransactions.value.forEach(t => {
+      const d = new Date(t.tanggal)
+      if (d >= start && d <= end) {
+        if (t.items) {
+          t.items.forEach(item => {
+            const name = item.product?.nama_produk || `Produk #${item.product_id}`
+            if (!productMap[name]) productMap[name] = 0
+            productMap[name] += item.jumlah
+          })
+        }
+      }
+    })
+  }
+
+  const sortedProducts = Object.keys(productMap)
+    .map(key => ({ name: key, count: productMap[key] }))
+    .sort((a, b) => b.count - a.count)
+    .slice(0, 5)
+
+  return {
+    labels: sortedProducts.map(p => p.name),
+    datasets: [
+      {
+        backgroundColor: ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'],
+        data: sortedProducts.map(p => p.count),
+        borderWidth: 1
+      }
+    ]
+  }
+})
+
+const pieChartOptions = ref({
+  responsive: true,
+  maintainAspectRatio: false,
+  plugins: {
+    legend: { position: 'bottom', labels: { boxWidth: 12 } }
+  }
+})
 </script>
 
 <template>
@@ -255,21 +305,40 @@ const chartOptions = ref({
       </div>
     </div>
 
-    <!-- Grafik Tren Transaksi -->
-    <div class="bg-white shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4">
-      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <div>
-          <h3 class="text-base font-bold text-slate-900">Tren Transaksi Harian</h3>
-          <p class="text-xs text-slate-500">Jumlah transaksi sukses per hari berdasarkan rentang waktu.</p>
+    <!-- Grafik dan Pie Chart Section -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <!-- Grafik Tren Transaksi -->
+      <div class="bg-white shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4 lg:col-span-2">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          <div>
+            <h3 class="text-base font-bold text-slate-900">Tren Transaksi Harian</h3>
+            <p class="text-xs text-slate-500">Jumlah transaksi sukses per hari berdasarkan rentang waktu.</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <input type="date" v-model="startDate" class="text-sm border border-slate-300 rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
+            <span class="text-slate-500 text-sm">s/d</span>
+            <input type="date" v-model="endDate" class="text-sm border border-slate-300 rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
+          </div>
         </div>
-        <div class="flex items-center gap-2">
-          <input type="date" v-model="startDate" class="text-sm border border-slate-300 rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
-          <span class="text-slate-500 text-sm">s/d</span>
-          <input type="date" v-model="endDate" class="text-sm border border-slate-300 rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
+        <div class="h-72 w-full">
+          <Line :data="chartData" :options="chartOptions" />
         </div>
       </div>
-      <div class="h-72 w-full">
-        <Line :data="chartData" :options="chartOptions" />
+
+      <!-- Pie Chart Produk Terlaris -->
+      <div class="bg-white shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4">
+        <div>
+          <h3 class="text-base font-bold text-slate-900">Produk Terlaris</h3>
+          <p class="text-xs text-slate-500">Berdasarkan rentang waktu di atas.</p>
+        </div>
+        <div class="h-64 w-full flex justify-center">
+          <div v-if="pieChartData.labels.length > 0" class="w-full h-full">
+            <Pie :data="pieChartData" :options="pieChartOptions" />
+          </div>
+          <div v-else class="flex items-center justify-center h-full w-full">
+            <p class="text-xs text-slate-400 italic">Tidak ada transaksi di rentang waktu ini.</p>
+          </div>
+        </div>
       </div>
     </div>
 
