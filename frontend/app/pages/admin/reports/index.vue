@@ -52,9 +52,82 @@ const handlePrint = () => {
   window.print()
 }
 
-const exportPDF = () => {
-  alert('Fitur Ekspor PDF sedang menyiapkan dokumen...')
-  // Di sini biasanya memanggil library jspdf atau endpoint backend khusus pdf
+const exportCSV = () => {
+  if (!transactions.value || transactions.value.length === 0) {
+    alert('Tidak ada data untuk diekspor')
+    return
+  }
+
+  const headers = ['Tanggal', 'Waktu', 'Item Terjual', 'Total Bayar']
+  const csvData = transactions.value.map(t => {
+    const date = new Date(t.tanggal).toLocaleDateString('id-ID')
+    const time = new Date(t.tanggal).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })
+    const items = t.items?.map(item => `${item.product?.nama_produk} (${item.jumlah})`).join('; ') || ''
+    const total = t.total_harga
+    return `"${date}","${time}","${items}","${total}"`
+  })
+
+  const csvContent = [headers.join(','), ...csvData].join('\n')
+  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
+  const link = document.createElement('a')
+  link.href = URL.createObjectURL(blob)
+  link.download = `Laporan_Penjualan_${startDate.value}_sd_${endDate.value}.csv`
+  link.click()
+}
+
+const exportExcel = async () => {
+  if (!transactions.value || transactions.value.length === 0) {
+    alert('Tidak ada data untuk diekspor')
+    return
+  }
+
+  const { utils, writeFile } = await import('xlsx')
+  const exportData = transactions.value.map(t => ({
+    Tanggal: new Date(t.tanggal).toLocaleDateString('id-ID'),
+    Waktu: new Date(t.tanggal).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }),
+    'Item Terjual': t.items?.map(item => `${item.product?.nama_produk} (${item.jumlah})`).join(', ') || '',
+    'Total Bayar': t.total_harga
+  }))
+
+  const worksheet = utils.json_to_sheet(exportData)
+  const workbook = utils.book_new()
+  utils.book_append_sheet(workbook, worksheet, 'Laporan')
+  writeFile(workbook, `Laporan_Penjualan_${startDate.value}_sd_${endDate.value}.xlsx`)
+}
+
+const exportPDF = async () => {
+  if (!transactions.value || transactions.value.length === 0) {
+    alert('Tidak ada data untuk diekspor')
+    return
+  }
+
+  const { jsPDF } = await import('jspdf')
+  const autoTableModule = await import('jspdf-autotable')
+  const autoTable = autoTableModule.default
+  
+  const doc = new jsPDF()
+  doc.setFontSize(16)
+  doc.text('Laporan Penjualan', 14, 20)
+  doc.setFontSize(10)
+  doc.text(`Periode: ${startDate.value} s/d ${endDate.value}`, 14, 28)
+
+  const tableColumn = ["Tanggal", "Waktu", "Item Terjual", "Total Bayar"]
+  const tableRows = transactions.value.map(t => [
+    new Date(t.tanggal).toLocaleDateString('id-ID'),
+    new Date(t.tanggal).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }),
+    t.items?.map(item => `${item.product?.nama_produk} (${item.jumlah})`).join(', ') || '',
+    `Rp. ${t.total_harga.toLocaleString('id-ID')}`
+  ])
+
+  autoTable(doc, {
+    startY: 35,
+    head: [tableColumn],
+    body: tableRows,
+    theme: 'grid',
+    headStyles: { fillColor: [15, 23, 42] }
+  })
+
+  doc.save(`Laporan_Penjualan_${startDate.value}_sd_${endDate.value}.pdf`)
 }
 
 // Otomatis refresh data saat tanggal diubah
@@ -83,9 +156,20 @@ watch([startDate, endDate], () => {
           <Icon name="lucide:printer" class="text-xl" />
         </button>
         
-        <button @click="exportPDF" class="px-5 py-2.5 bg-slate-900 text-white rounded-xl font-semibold text-sm hover:bg-slate-800 transition shadow-lg shadow-slate-200 flex items-center gap-2">
-          Ekspor PDF
-        </button>
+        <div class="flex gap-2">
+          <button @click="exportCSV" class="px-4 py-2.5 bg-indigo-600 text-white rounded-xl font-semibold text-sm hover:bg-indigo-700 transition shadow-lg shadow-indigo-200 flex items-center gap-2">
+            <Icon name="lucide:file-text" class="text-lg" />
+            CSV
+          </button>
+          <button @click="exportExcel" class="px-4 py-2.5 bg-emerald-600 text-white rounded-xl font-semibold text-sm hover:bg-emerald-700 transition shadow-lg shadow-emerald-200 flex items-center gap-2">
+            <Icon name="lucide:file-spreadsheet" class="text-lg" />
+            Excel
+          </button>
+          <button @click="exportPDF" class="px-4 py-2.5 bg-red-600 text-white rounded-xl font-semibold text-sm hover:bg-red-800 transition shadow-lg shadow-slate-200 flex items-center gap-2">
+            <Icon name="lucide:file" class="text-lg" />
+            PDF
+          </button>
+        </div>
       </div>
     </div>
 
