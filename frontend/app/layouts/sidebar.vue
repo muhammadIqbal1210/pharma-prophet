@@ -17,7 +17,7 @@ const pageTitle = computed(() => {
 const mainMenu = [
   { label: 'Dashboard', to: '/apoteker/dashboard', icon: 'lucide:layout-dashboard' },
   { label: 'Produk', to: '/apoteker/products', icon: 'lucide:package-plus' },
-  { label: 'Stok Obat', to: '/apoteker/stock', icon: 'lucide:pill' }, 
+  // { label: 'Stok Obat', to: '/apoteker/stock', icon: 'lucide:pill' }, 
   { label: 'Transaksi', to: '/apoteker/transactions', icon: 'lucide:receipt' },
   { label: 'Prediksi Stok', to: '/apoteker/prediksi', icon: 'lucide:cpu' },
 ]
@@ -27,6 +27,7 @@ const adminMenu = [
   { label: 'Manajemen User', to: '/admin/users', icon: 'lucide:user-cog' },
   { label: 'Produk', to: '/admin/products', icon: 'lucide:package-plus' },
   { label: 'Stok Obat', to: '/admin/stock', icon: 'lucide:pill' }, 
+  { label: 'Pembelian Stok', to: '/admin/purchases', icon: 'lucide:shopping-cart' },
   { label: 'Transaksi', to: '/admin/transactions', icon: 'lucide:receipt' },
   { label: 'Prediksi Stok', to: '/admin/prediksi', icon: 'lucide:cpu' },
   { label: 'Laporan Penjualan', to: '/admin/reports', icon: 'lucide:activity' }, 
@@ -71,7 +72,7 @@ const adminMenu = [
             <p class="px-4 text-[10px] font-semibold uppercase tracking-widest text-slate-400">Sistem Admin</p>
             <div class="space-y-1">
               <NuxtLink
-                v-for="item in adminMenu.slice(0, 6)"
+                v-for="item in adminMenu.slice(0, 7)"
                 :key="item.to"
                 :to="item.to"
                 class="flex items-center gap-3 rounded-xl px-4 py-2 text-sm font-semibold text-slate-600 transition-all duration-200 hover:bg-slate-50 hover:text-emerald-600 group"
@@ -85,18 +86,18 @@ const adminMenu = [
               </NuxtLink>
             </div>
 
-            <div class="pt-5 space-y-1">
+            <div class="pt-4 space-y-1">
               <p class="px-4 pb-2 text-[10px] font-semibold uppercase tracking-widest text-slate-400">Laporan</p>
               <NuxtLink
-                :to="adminMenu[6].to"
-                class="flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold text-slate-600 transition-all duration-200 hover:bg-slate-50 hover:text-emerald-600 group"
+                :to="adminMenu[7].to"
+                class="flex items-center gap-3 rounded-xl px-4 py-2 text-sm font-semibold text-slate-600 transition-all duration-200 hover:bg-slate-50 hover:text-emerald-600 group"
                 active-class="bg-emerald-50 !text-emerald-700 border border-emerald-100/50"
               >
                 <div class="w-8 h-8 rounded-lg bg-slate-100 group-hover:bg-emerald-100/60 transition-colors flex items-center justify-center shrink-0"
-                     :class="route.path === adminMenu[6].to ? '!bg-emerald-100 text-emerald-600' : 'text-slate-400 group-hover:text-emerald-600'">
-                  <Icon :name="adminMenu[6].icon" class="text-base" />
+                     :class="route.path === adminMenu[7].to ? '!bg-emerald-100 text-emerald-600' : 'text-slate-400 group-hover:text-emerald-600'">
+                  <Icon :name="adminMenu[7].icon" class="text-base" />
                 </div>
-                {{ adminMenu[6].label }}
+                {{ adminMenu[7].label }}
               </NuxtLink>
             </div>
           </template>
