@@ -173,28 +173,28 @@ watch([startDate, endDate], () => {
       </div>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
       <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm space-y-2">
-        <p class="text-sm font-semibold text-slate-400">Total Pendapatan</p>
+        <p class="text-sm font-semibold text-slate-400">Total Pendapatan (Penjualan)</p>
         <h2 class="text-2xl font-bold text-slate-900">Rp. {{ (summary?.total_omzet || 0).toLocaleString('id-ID') }}</h2>
         <div class="h-1.5 w-12 bg-emerald-500 rounded-full"></div>
       </div>
 
       <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm space-y-2">
-        <p class="text-sm font-semibold text-slate-400">Item Terjual</p>
-        <h2 class="text-2xl font-bold text-slate-900">{{ totalItemTerjual }} <span class="text-sm font-medium text-slate-400 font-mono">Pcs</span></h2>
+        <p class="text-sm font-semibold text-slate-400">Total Transaksi (Penjualan)</p>
+        <h2 class="text-2xl font-bold text-slate-900">{{ summary?.total_transaksi || 0 }} <span class="text-sm font-medium text-slate-400 font-mono">Nota</span></h2>
         <div class="h-1.5 w-12 bg-blue-500 rounded-full"></div>
       </div>
 
       <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm space-y-2">
-        <p class="text-sm font-semibold text-slate-400">Rata-rata Transaksi</p>
-        <h2 class="text-2xl font-bold text-slate-900">Rp. {{ Math.round(rataRataTransaksi).toLocaleString('id-ID') }}</h2>
+        <p class="text-sm font-semibold text-slate-400">Total Pengeluaran (Pembelian)</p>
+        <h2 class="text-2xl font-bold text-slate-900">Rp. {{ (summary?.total_pengeluaran || 0).toLocaleString('id-ID') }}</h2>
         <div class="h-1.5 w-12 bg-amber-500 rounded-full"></div>
       </div>
 
       <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm space-y-2">
-        <p class="text-sm font-semibold text-slate-400">Total Transaksi</p>
-        <h2 class="text-2xl font-bold text-slate-900">{{ summary?.total_transaksi || 0 }} <span class="text-sm font-medium text-slate-400 font-mono">Nota</span></h2>
+        <p class="text-sm font-semibold text-slate-400">Total Pembelian Stok</p>
+        <h2 class="text-2xl font-bold text-slate-900">{{ summary?.total_pembelian || 0 }} <span class="text-sm font-medium text-slate-400 font-mono">Nota</span></h2>
         <div class="h-1.5 w-12 bg-purple-500 rounded-full"></div>
       </div>
     </div>
