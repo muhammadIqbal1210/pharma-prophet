@@ -35,34 +35,39 @@ const { data: allProducts } = await useFetch(`${config.public.apiBase}/product/`
   }
 })
 
-// --- MAPPING TABEL ---
+// --- MAPPING TABEL (Satu ID Nota = Satu Baris) ---
 const transactions = computed(() => {
   if (!rawTransactions.value) return []
-  const list = []
-  rawTransactions.value.forEach(t => {
+
+  return rawTransactions.value.map(t => {
+    let detailProdukString = '-'
+    let totalQtyNota = 0
+
     if (t.items && t.items.length > 0) {
-      t.items.forEach(item => {
-        list.push({
-          id_nota: t.id,
-          tanggal: t.tanggal,
-          total_harga_nota: t.total_harga,
-          jumlah_beli: item.jumlah,
-          harga_satuan: item.harga_satuan,
-          nama_produk: item.product?.nama_produk || `Produk ID #${item.product_id}`
-        })
+      // Petakan setiap item menjadi format "Nama Produk (Qty x @Rp Harga)"
+      const itemTextArray = t.items.map(item => {
+        const nama = item.product?.nama_produk || `Produk ID #${item.product_id}`
+        totalQtyNota += item.jumlah // Akumulasi total kuantitas per nota
+        
+        // Format harga ke rupiah tanpa desimal panjang
+        const hargaFormatted = Number(item.harga_satuan).toLocaleString('id-ID')
+        
+        return `${nama} (${item.jumlah}x @Rp ${hargaFormatted})`
       })
-    } else {
-      list.push({
-        id_nota: t.id,
-        tanggal: t.tanggal,
-        total_harga_nota: t.total_harga,
-        jumlah_beli: 0,
-        harga_satuan: 0,
-        nama_produk: '-'
-      })
+      
+      // Gabungkan menjadi string: "Paracetamol 500 Mg (4x @Rp 10.000), Amoxilin (4x @Rp 10.000)"
+      detailProdukString = itemTextArray.join(', ')
+    }
+
+    return {
+      id_nota: t.id,
+      tanggal: t.tanggal,
+      total_harga_nota: t.total_harga,
+      jumlah_beli: totalQtyNota,
+      produk_display: detailProdukString,
+      items_raw: t.items || [] // Disimpan jika nanti ingin render komponen badge/pill manual
     }
   })
-  return list
 })
 
 // --- LOGIKA FORM DINAMIS (MANIPULASI ITEM) ---
@@ -81,7 +86,6 @@ const handleProductChange = (index) => {
   const selectedProdId = form.value.items[index].product_id
   const product = allProducts.value?.find(p => p.id === Number(selectedProdId))
   if (product) {
-    // Pastikan menggunakan key backend kamu, misal harga_jual atau harga
     form.value.items[index].harga_satuan = Number(product.harga_jual || product.harga || 0)
   }
 }
@@ -96,7 +100,6 @@ watch(() => form.value.items, (newItems) => {
 // --- AKSI: SIMPAN TRANSAKSI KE SERVER ---
 const handleSaveTransaction = async () => {
   try {
-    // Validasi tipe data payload agar terhindar dari 422 Unprocessable Content
     const payload = {
       tanggal: new Date().toISOString(),
       total_harga: Number(form.value.total_harga),
@@ -156,19 +159,21 @@ const handleSaveTransaction = async () => {
         <thead class="bg-slate-50 border-b border-slate-200">
           <tr>
             <th class="p-4 text-xs font-bold text-slate-500 uppercase tracking-wider">ID Nota</th>
-            <th class="p-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Nama Produk</th>
-            <th class="p-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Jumlah Beli</th>
-            <th class="p-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Harga Satuan</th>
+            <th class="p-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Daftar Produk & Harga Satuan</th>
+            <th class="p-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Total Qty</th>
             <th class="p-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Total Nota</th>
             <th class="p-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Tanggal Transaksi</th>
           </tr>
         </thead>
         <tbody class="divide-y divide-slate-100 text-sm text-slate-700">
-          <tr v-for="(tx, index) in transactions" :key="index" class="hover:bg-slate-50/80 transition">
+          <tr v-for="tx in transactions" :key="tx.id_nota" class="hover:bg-slate-50/80 transition">
             <td class="p-4 font-mono text-xs text-slate-500">#TRX-{{ tx.id_nota }}</td>
-            <td class="p-4 font-semibold text-slate-900">{{ tx.nama_produk }}</td>
+            
+            <td class="p-4 text-slate-900 font-medium max-w-md leading-relaxed">
+              {{ tx.produk_display }}
+            </td>
+            
             <td class="p-4 font-medium text-slate-800">{{ tx.jumlah_beli }} Pcs</td>
-            <td class="p-4 text-slate-600">Rp {{ Number(tx.harga_satuan).toLocaleString('id-ID') }}</td>
             <td class="p-4 font-bold text-emerald-600">Rp {{ Number(tx.total_harga_nota).toLocaleString('id-ID') }}</td>
             <td class="p-4 text-slate-500 font-mono text-xs">
               {{ tx.tanggal ? new Date(tx.tanggal).toLocaleString('id-ID') : '-' }}
@@ -176,7 +181,7 @@ const handleSaveTransaction = async () => {
           </tr>
 
           <tr v-if="!transactions.length">
-            <td colspan="6" class="p-8 text-center text-slate-400">Tidak ada riwayat transaksi penjualan obat.</td>
+            <td colspan="5" class="p-8 text-center text-slate-400">Tidak ada riwayat transaksi penjualan obat.</td>
           </tr>
         </tbody>
       </table>
