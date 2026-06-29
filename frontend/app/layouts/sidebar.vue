@@ -19,7 +19,7 @@ const mainMenu = [
   { label: 'Produk', to: '/apoteker/products', icon: 'lucide:package-plus' },
   // { label: 'Stok Obat', to: '/apoteker/stock', icon: 'lucide:pill' }, 
   { label: 'Transaksi', to: '/apoteker/transactions', icon: 'lucide:receipt' },
-  { label: 'Prediksi Stok', to: '/apoteker/prediksi', icon: 'lucide:cpu' },
+  // { label: 'Prediksi Stok', to: '/apoteker/prediksi', icon: 'lucide:cpu' },
 ]
 
 const adminMenu = [

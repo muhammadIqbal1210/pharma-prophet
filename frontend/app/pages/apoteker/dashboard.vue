@@ -5,7 +5,7 @@ definePageMeta({
 })
 
 const config = useRuntimeConfig()
-const { currentUser } = useAuth()
+const { currentUser, token } = useAuth()
 
 import { Line, Pie } from 'vue-chartjs'
 import {
@@ -35,20 +35,21 @@ ChartJS.register(
 // Ambil Data Transaksi
 const { data: rawTransactions } = await useFetch(`${config.public.apiBase}/transaction/`, {
   method: 'GET',
-  headers: { Authorization: `Bearer ${currentUser.value?.token}` }
+  headers: { Authorization: `Bearer ${token.value}` }
 })
 
 // Ambil Data Master Produk
 const { data: allProducts } = await useFetch(`${config.public.apiBase}/product/`, {
   method: 'GET',
-  headers: { Authorization: `Bearer ${currentUser.value?.token}` }
+  headers: { Authorization: `Bearer ${token.value}` }
 })
 
 // Ambil Data Mutasi Stok
 const { data: rawStock } = await useFetch(`${config.public.apiBase}/stock/`, {
   method: 'GET',
-  headers: { Authorization: `Bearer ${currentUser.value?.token}` }
+  headers: { Authorization: `Bearer ${token.value}` }
 })
+
 
 // --- 2. LOGIKA KARTU METRIK UTAMA (TOP CARDS) ---
 const totalProduk = computed(() => allProducts.value?.length || 0)
@@ -344,7 +345,7 @@ const pieChartOptions = ref({
 
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
       
-      <div class="bg-white shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4">
+      <!-- <div class="bg-white shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4">
         <h3 class="text-base font-bold text-slate-900">Peringatan Stok Rendah</h3>
         <div class="space-y-3">
           <div v-for="item in stokRendahList" :key="item.id" class="flex justify-between items-center text-sm font-semibold">
@@ -355,9 +356,9 @@ const pieChartOptions = ref({
           </div>
           <p v-if="!stokRendahList.length" class="text-xs text-slate-400 italic">Semua aman, tidak ada stok krisis.</p>
         </div>
-      </div>
+      </div> -->
 
-      <div class="bg-white shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4">
+      <!-- <div class="bg-white shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4">
         <h3 class="text-base font-bold text-slate-900">Stok Terbaru</h3>
         <div class="space-y-3">
           <div v-for="item in stokTerbaruList" :key="item.id" class="flex justify-between items-center text-sm font-semibold">
@@ -373,9 +374,9 @@ const pieChartOptions = ref({
           </div>
           <p v-if="!stokTerbaruList.length" class="text-xs text-slate-400 italic">Belum ada riwayat mutasi stok.</p>
         </div>
-      </div>
+      </div> -->
 
-      <div class="bg-white p-6 rounded-2xl border border-slate-200 space-y-4">
+      <!-- <div class="bg-white p-6 rounded-2xl border border-slate-200 space-y-4">
         <h3 class="text-base font-bold text-slate-900">Aktivitas Anda</h3>
         <div class="space-y-4">
           <div v-for="(act, idx) in aktivitasList" :key="idx" class="space-y-0.5">
@@ -399,7 +400,7 @@ const pieChartOptions = ref({
           </div>
           <p v-if="!produkTerlarisList.length" class="text-xs text-slate-400 italic">Belum ada item obat terjual.</p>
         </div>
-      </div>
+      </div> -->
 
     </div>
   </div>

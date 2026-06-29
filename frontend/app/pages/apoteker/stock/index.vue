@@ -5,7 +5,7 @@ definePageMeta({
 })
 
 const config = useRuntimeConfig()
-const { currentUser } = useAuth()
+const { currentUser, token } = useAuth()
 
 // --- STATE REAKTIF MODAL & FORM STOK ---
 const isModalOpen = ref(false)
@@ -21,7 +21,7 @@ const form = ref({
 const { data: rawStock, pending: stockPending, error: stockError, refresh } = await useFetch(`${config.public.apiBase}/stock/`, {
   method: 'GET',
   headers: {
-    Authorization: `Bearer ${currentUser.value?.token}`
+    Authorization: `Bearer ${token.value}`
   }
 })
 
@@ -29,7 +29,7 @@ const { data: rawStock, pending: stockPending, error: stockError, refresh } = aw
 const { data: allProducts } = await useFetch(`${config.public.apiBase}/product/`, {
   method: 'GET',
   headers: {
-    Authorization: `Bearer ${currentUser.value?.token}`
+    Authorization: `Bearer ${token.value}`
   }
 })
 
@@ -63,7 +63,7 @@ const handleAddStock = async () => {
     await $fetch(`${config.public.apiBase}/stock/`, {
       method: 'POST',
       headers: {
-        Authorization: `Bearer ${currentUser.value?.token}`,
+        Authorization: `Bearer ${token.value}`,
         'Content-Type': 'application/json'
       },
       body: payload
@@ -88,7 +88,7 @@ const deleteStock = async (id) => {
     try {
       await $fetch(`${config.public.apiBase}/stock/${id}/`, {
         method: 'DELETE',
-        headers: { Authorization: `Bearer ${currentUser.value?.token}` }
+        headers: { Authorization: `Bearer ${token.value}` }
       })
       alert('Data riwayat stok berhasil dihapus.')
       refresh()
@@ -97,6 +97,7 @@ const deleteStock = async (id) => {
     }
   }
 }
+
 </script>
 
 <template>

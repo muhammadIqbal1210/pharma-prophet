@@ -4,15 +4,16 @@ definePageMeta({
   composables: 'useAuth'    // Menggunakan middleware/auth.ts
 })
 const config = useRuntimeConfig()
-const { currentUser } = useAuth()
+const { currentUser, token } = useAuth()
 
 // ambil data produk dari backend
 const { data: products, pending, error, refresh } = await useFetch(`${config.public.apiBase}/product/`, {
   method: 'GET',
   headers: {
-    Authorization: `Bearer ${currentUser.value?.token}`
+    Authorization: `Bearer ${token.value}`
   }
 })
+
 </script>
 <template>
   <div class="space-y-6">

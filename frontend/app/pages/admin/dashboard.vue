@@ -4,8 +4,7 @@ definePageMeta({
 })
 
 const config = useRuntimeConfig()
-const { currentUser } = useAuth()
-const tokenCookie = useCookie('auth_token')
+const { currentUser, token } = useAuth()
 
 import { Line, Pie } from 'vue-chartjs'
 import {
@@ -34,8 +33,9 @@ ChartJS.register(
 // penembakan API mentah agar status pending & error-nya terpusat satu pintu
 const { data: dashboardData, pending, error } = await useAsyncData('admin-dashboard', async () => {
   const headers = { 
-    Authorization: `Bearer ${tokenCookie.value || currentUser.value?.token}` 
+    Authorization: `Bearer ${token.value}` 
   }
+
 
   // Ambil semua data mentah secara paralel
   const [users, products, transactions, stockData] = await Promise.all([
@@ -339,7 +339,7 @@ const stokRendahList = computed(() => {
           </div>
         </div>
 
-        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex flex-col justify-between">
+        <!-- <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex flex-col justify-between">
           <div class="space-y-3">
             <h3 class="text-lg font-bold text-slate-800">Status PharmaCast ML</h3>
             <p class="text-xs text-slate-500">Kondisi performa kecerdasan buatan sistem inventory hari ini.</p>
@@ -357,7 +357,7 @@ const stokRendahList = computed(() => {
           <NuxtLink to="/admin/prediksi" class="w-full py-2.5 mt-4 text-center block bg-slate-50 border border-slate-200 text-slate-700 font-semibold rounded-xl hover:bg-slate-100 text-sm transition">
             Buka Panel Prediksi Stok
           </NuxtLink>
-        </div>
+        </div> -->
 
         <!-- Stok Krisis List (Tambahan Admin) -->
         <div class="bg-white shadow-sm p-6 rounded-2xl border border-slate-200 space-y-4">

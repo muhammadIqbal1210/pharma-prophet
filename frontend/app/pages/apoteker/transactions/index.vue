@@ -5,7 +5,7 @@ definePageMeta({
 })
 
 const config = useRuntimeConfig()
-const { currentUser } = useAuth()
+const { currentUser, token } = useAuth()
 
 // --- STATE UTAMA ---
 const isModalOpen = ref(false)
@@ -23,7 +23,7 @@ const form = ref({
 const { data: rawTransactions, pending: transactionsPending, error: transactionsError, refresh } = await useFetch(`${config.public.apiBase}/transaction/`, {
   method: 'GET',
   headers: {
-    Authorization: `Bearer ${currentUser.value?.token}`
+    Authorization: `Bearer ${token.value}`
   }
 })
 
@@ -31,9 +31,10 @@ const { data: rawTransactions, pending: transactionsPending, error: transactions
 const { data: allProducts } = await useFetch(`${config.public.apiBase}/product/`, {
   method: 'GET',
   headers: {
-    Authorization: `Bearer ${currentUser.value?.token}`
+    Authorization: `Bearer ${token.value}`
   }
 })
+
 
 // --- MAPPING TABEL (Satu ID Nota = Satu Baris) ---
 const transactions = computed(() => {
@@ -113,7 +114,7 @@ const handleSaveTransaction = async () => {
     await $fetch(`${config.public.apiBase}/transaction/`, {
       method: 'POST',
       headers: {
-        Authorization: `Bearer ${currentUser.value?.token}`,
+        Authorization: `Bearer ${token.value}`,
         'Content-Type': 'application/json'
       },
       body: payload

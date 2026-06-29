@@ -1,20 +1,65 @@
 <script setup>
+import { ref, computed, watch } from 'vue'
+
 definePageMeta({
-  layout: 'sidebar', // Menggunakan layouts/sidebar.vue
-  composables: 'useAuth'    // Menggunakan middleware/auth.ts
+  layout: 'sidebar',
+  composables: 'useAuth' // Catatan: Biasanya menggunakan property 'middleware', bukan 'composables' untuk route guard
 })
 
 const config = useRuntimeConfig()
-const { currentUser } = useAuth()
+const { token } = useAuth()
 
 // Ambil data produk dari backend
 const { data: products, pending, error, refresh } = await useFetch(`${config.public.apiBase}/product`, {
   method: 'GET',
   headers: {
-    Authorization: `Bearer ${currentUser.value?.token}`
+    Authorization: `Bearer ${token.value}`
   }
 })
+
+// --- STATE PAGINATION ---
+const currentPage = ref(1)
+const pageSize = ref(10) // Batas data per halaman
+
+// Memotong data produk berdasarkan halaman aktif
+const displayedProducts = computed(() => {
+  if (!products.value) return []
+  const start = (currentPage.value - 1) * pageSize.value
+  const end = start + pageSize.value
+  return products.value.slice(start, end)
+})
+
+// Menghitung total data asli untuk komponen pagination
+const totalItems = computed(() => {
+  return products.value ? products.value.length : 0
+})
+
+// Pembalas emit ketika tombol angka halaman diklik
+const handlePageChange = (newPage) => {
+  currentPage.value = newPage
+}
+
+// Reset halaman ke 1 jika data produk diperbarui/di-refresh dari server
+watch(products, () => {
+  currentPage.value = 1
+}, { deep: true })
+
+// Fungsi Hapus Produk
+const deleteProduct = async (id) => {
+  if (!confirm('Apakah Anda yakin ingin menghapus produk ini? Tindakan ini tidak dapat dibatalkan.')) return
+  try {
+    await $fetch(`${config.public.apiBase}/product/${id}`, {
+      method: 'DELETE',
+      headers: { Authorization: `Bearer ${token.value}` }
+    })
+    alert('Produk berhasil dihapus.')
+    refresh()
+  } catch (err) {
+    alert(err.data?.detail || 'Gagal menghapus produk.')
+  }
+}
 </script>
+
 <template>
   <div class="space-y-6">
     <div class="flex justify-between items-center">
@@ -50,7 +95,7 @@ const { data: products, pending, error, refresh } = await useFetch(`${config.pub
           </tr>
         </thead>
         <tbody class="divide-y divide-slate-100 text-sm text-slate-700">
-          <tr v-for="product in products" :key="product.id" class="hover:bg-slate-50/80 transition">
+          <tr v-for="product in displayedProducts" :key="product.id" class="hover:bg-slate-50/80 transition">
             <td class="p-4 font-mono text-slate-600 text-xs">{{ product.nama_produk }}</td>
             <td class="p-4 font-semibold text-slate-900">{{ product.kategori }}</td>
             <td class="p-4 text-slate-500">{{ product.harga_jual }}</td>
@@ -58,16 +103,29 @@ const { data: products, pending, error, refresh } = await useFetch(`${config.pub
             <td class="p-4">{{ product.stok_minimum }}</td>
             <td class="p-4">{{ product.deskripsi }}</td>
             <td class="p-4 text-center space-x-3">
-                <NuxtLink :to="`/admin/products/${product.id}/edit`" class="text-indigo-600 hover:text-indigo-900 font-semibold text-xs">Edit</NuxtLink>
-                <button @click="deleteProduct(product.id)" class="text-rose-600 hover:text-rose-900 font-semibold text-xs">Hapus</button>
+                <NuxtLink :to="`/admin/products/${product.id}/edit`" class="p-2 text-indigo-600 hover:bg-indigo-50 rounded-lg transition" title="Edit">
+                    <Icon name="lucide:edit" class="text-lg" />
+                </NuxtLink>
+                <NuxtLink :to="`/admin/products/${product.id}/delete`" class="p-2 text-rose-600 hover:bg-rose-50 rounded-lg transition" title="Delete">
+                    <Icon name="lucide:trash-2" class="text-lg" />
+                </NuxtLink>
             </td>
           </tr>
           
-          <tr v-if="!products?.length">
+          <tr v-if="!displayedProducts.length">
             <td colspan="7" class="p-8 text-center text-slate-400">Tidak ada data produk yang ditemukan.</td>
           </tr>
         </tbody>
       </table>
+
     </div>
+      <div v-if="products?.length" class="flex justify-end bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+        <Pagination 
+          :totalItems="totalItems" 
+          :pageSize="pageSize" 
+          :currentPage="currentPage"
+          @page-changed="handlePageChange"
+        />
+      </div>
   </div>
 </template>

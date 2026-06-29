@@ -54,6 +54,7 @@ export const useAuth = () => {
   }
 
   const currentUser = computed(() => (userState.value || userCookie.value) as Record<string, any> | null)
+  const token = computed(() => tokenCookie.value)
   const isAdmin = computed(() => String(currentUser.value?.role || '').toLowerCase() === 'admin')
 
   // 4. Cek Status Login
@@ -67,5 +68,7 @@ export const useAuth = () => {
     userState,
     currentUser,
     isAdmin,
+    token,
   }
+
 }
