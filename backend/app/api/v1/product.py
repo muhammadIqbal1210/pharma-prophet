@@ -1,4 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException
+from typing import List
+from app.schemas.prediction import PredictionResponse
+from app.schemas.prediction_request import PredictionRequest
+from app.utils.prediction import forecast as model_forecast
 from sqlalchemy.orm import Session
 from app.database.session import get_db
 from app.models.product import Product
