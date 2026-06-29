@@ -1,16 +1,15 @@
-# app/ml_core/model_trainer.py
-import pandas as pd
 from prophet import Prophet
 
-def run_prophet_forecast(data):
-    df = pd.DataFrame(data)
-    df['ds'] = pd.to_datetime(df['ds'])
-    
-    model = Prophet(yearly_seasonality=True, weekly_seasonality=True)
-    model.add_country_holidays(country_name='ID')
+def run_forecast(df, days=90):
+
+    model = Prophet()
+
     model.fit(df)
-    
-    future = model.make_future_dataframe(periods=30)
+
+    future = model.make_future_dataframe(
+        periods=days
+    )
+
     forecast = model.predict(future)
-    
-    return forecast[['ds', 'yhat', 'yhat_lower', 'yhat_upper']].tail(30).to_dict('records')
+
+    return forecast
