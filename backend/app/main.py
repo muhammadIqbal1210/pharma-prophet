@@ -1,8 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-# Import router utama yang menggabungkan semua sub-router
+
 from app.api.v1.router import api_router
-from app.models import user, product
+from app.models import user, product, transaction, stock, purchase
 from app.database.session import engine, Base
 
 app = FastAPI(
