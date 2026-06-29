@@ -1,8 +1,16 @@
 # app/services/auth_service.py
+# pyrefly: ignore [missing-import]
 import bcrypt
 from datetime import datetime, timedelta
 from jose import jwt
 from app.config import settings
+from fastapi import Depends, HTTPException, status
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from sqlalchemy.orm import Session
+from app.database.session import get_db
+from app.models.user import User
+
+security = HTTPBearer()
 
 def get_password_hash(password: str) -> str:
     pwd_bytes = password.encode('utf-8')
@@ -30,3 +38,35 @@ def create_access_token(data: dict):
         algorithm=settings.ALGORITHM
     )
     return encoded_jwt
+
+def decode_access_token(token: str) -> dict:
+    try:
+        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
+        return payload
+    except jwt.JWTError:
+        return None
+
+def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(security), db: Session = Depends(get_db)) -> User:
+    token = credentials.credentials
+    payload = decode_access_token(token)
+    if not payload:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Token tidak valid atau telah kadaluarsa",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    email: str = payload.get("sub")
+    if email is None:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Token tidak valid atau telah kadaluarsa",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    user = db.query(User).filter(User.email == email).first()
+    if user is None:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="User tidak ditemukan",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    return user
